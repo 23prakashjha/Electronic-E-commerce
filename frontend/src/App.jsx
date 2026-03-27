@@ -57,9 +57,6 @@ function AppContent() {
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/register" element={<AdminRegister />} />
-        <Route path="/admin/products" element={<AdminDashboard />} />
-        <Route path="/admin/products/new" element={<ProductForm />} />
-        <Route path="/admin/products/:id" element={<ProductForm />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/products" element={<AdminProductsPage />} />
