@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
-  ChartBarIcon,
   ShoppingBagIcon,
   UsersIcon,
   CurrencyDollarIcon,
@@ -9,22 +8,18 @@ import {
   EyeIcon,
   PencilIcon,
   TrashIcon,
-  ArrowTrendingUpIcon,
-  ArrowTrendingDownIcon,
-  CubeIcon
+  CubeIcon,
+  ArrowRightOnRectangleIcon,
+  ArrowLeftIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('overview');
   const [stats, setStats] = useState({
     totalOrders: 0,
     totalRevenue: 0,
     totalUsers: 0,
-    totalProducts: 0,
-    recentOrders: []
+    totalProducts: 0
   });
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -42,73 +37,46 @@ const AdminDashboard = () => {
       return;
     }
 
-    fetchStats();
-    fetchProducts();
-    fetchOrders();
-    fetchUsers();
+    fetchData();
   }, []);
 
-  const fetchStats = async () => {
+  const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders/stats', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      const data = await response.json();
-      if (data.success) {
-        setStats(data.stats);
-      }
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-    }
-  };
-
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/api/products?limit=10', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      const data = await response.json();
-      if (data.success) {
-        setProducts(data.products);
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
-
-  const fetchOrders = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/api/orders?limit=10', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      const data = await response.json();
-      if (data.success) {
-        setOrders(data.orders);
-      }
-    } catch (error) {
-      console.error('Error fetching orders:', error);
-    }
-  };
-
-  const fetchUsers = async () => {
-    try {
-      // Note: This would need a separate endpoint for user management
-      // For now, we'll use mock data
-      setUsers([
-        { _id: '1', name: 'John Doe', email: 'john@example.com', role: 'user', createdAt: new Date() },
-        { _id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'user', createdAt: new Date() }
+      const token = localStorage.getItem('token');
+      const headers = { 'Authorization': `Bearer ${token}` };
+      
+      const [productsRes, ordersRes, usersRes] = await Promise.all([
+        fetch('http://localhost:5000/api/products?limit=100', { headers }),
+        fetch('http://localhost:5000/api/orders?limit=50', { headers }),
+        fetch('http://localhost:5000/api/users', { headers })
       ]);
+
+      const productsData = await productsRes.json();
+      const ordersData = await ordersRes.json();
+      const usersData = await usersRes.json();
+
+      if (productsData.success) setProducts(productsData.products);
+      if (ordersData.success) setOrders(ordersData.orders);
+      if (usersData.success) setUsers(usersData.users);
+      
+      setStats({
+        totalOrders: ordersData.orders?.length || 0,
+        totalRevenue: 0,
+        totalUsers: usersData.users?.length || 0,
+        totalProducts: productsData.products?.length || 0
+      });
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    toast.success('Logged out successfully');
+    navigate('/admin/login');
   };
 
   const handleDeleteProduct = async (productId) => {
@@ -116,9 +84,7 @@ const AdminDashboard = () => {
       try {
         const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
           method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         
         if (response.ok) {
@@ -145,7 +111,7 @@ const AdminDashboard = () => {
       
       if (response.ok) {
         setOrders(orders.map(order => 
-          order._id === orderId ? { ...order, orderStatus } : order
+          order._id === orderId ? { ...order, orderStatus: status } : order
         ));
         toast.success('Order status updated');
       }
@@ -155,355 +121,244 @@ const AdminDashboard = () => {
     }
   };
 
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: ChartBarIcon },
-    { id: 'products', label: 'Products', icon: CubeIcon },
-    { id: 'orders', label: 'Orders', icon: ShoppingBagIcon },
-    { id: 'users', label: 'Users', icon: UsersIcon }
-  ];
-
-  const StatCard = ({ title, value, icon: Icon, change, changeType }) => (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
-          {change !== undefined && (
-            <div className={`flex items-center text-sm ${
-              changeType === 'increase' ? 'text-green-600' : 'text-red-600'
-            }`}>
-              {changeType === 'increase' ? (
-                <ArrowTrendingUpIcon className="h-4 w-4 mr-1" />
-              ) : (
-                <ArrowTrendingDownIcon className="h-4 w-4 mr-1" />
-              )}
-              {change}%
-            </div>
-          )}
-        </div>
-        <div className="p-3 bg-primary-100 rounded-full">
-          <Icon className="h-6 w-6 text-primary-600" />
-        </div>
-      </div>
-    </div>
-  );
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="animate-pulse space-y-6">
-            <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="bg-white rounded-lg shadow-md p-6">
-                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                  <div className="h-8 bg-gray-200 rounded w-1/2"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <Footer />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage your e-commerce store</p>
-        </div>
-
-        {/* Navigation Tabs */}
-        <div className="bg-white rounded-lg shadow-md mb-8">
-          <div className="flex space-x-1 p-1">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-3 rounded-lg font-medium transition-colors ${
-                  activeTab === tab.id
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <tab.icon className="h-5 w-5" />
-                <span>{tab.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Overview Tab */}
-        {activeTab === 'overview' && (
-          <div className="space-y-8">
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <StatCard
-                title="Total Orders"
-                value={stats.totalOrders}
-                icon={ShoppingBagIcon}
-                change={12}
-                changeType="increase"
-              />
-              <StatCard
-                title="Total Revenue"
-                value={`₹${(stats.totalRevenue || 0).toLocaleString('en-IN')}`}
-                icon={CurrencyDollarIcon}
-                change={8}
-                changeType="increase"
-              />
-              <StatCard
-                title="Total Users"
-                value={stats.totalUsers}
-                icon={UsersIcon}
-                change={15}
-                changeType="increase"
-              />
-              <StatCard
-                title="Total Products"
-                value={stats.totalProducts}
-                icon={CubeIcon}
-                change={5}
-                changeType="increase"
-              />
-            </div>
-
-            {/* Recent Orders */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900">Recent Orders</h2>
-                <Link
-                  to="/admin/orders"
-                  className="text-primary-600 hover:text-primary-700 font-medium"
-                >
-                  View All
-                </Link>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      <div className="bg-white/10 backdrop-blur-xl border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <Link to="/admin" className="flex items-center space-x-2">
+              <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
+                <span className="text-white font-bold text-xl">E</span>
               </div>
-              
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Order ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Customer
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Amount
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Date
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {stats.recentOrders.slice(0, 5).map((order) => (
-                      <tr key={order._id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          #{order._id.slice(-8)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {order.user?.name || 'N/A'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          ₹{order.totalPrice.toLocaleString('en-IN')}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            order.orderStatus === 'delivered'
-                              ? 'bg-green-100 text-green-800'
-                              : order.orderStatus === 'processing'
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-yellow-100 text-yellow-800'
-                          }`}>
-                            {order.orderStatus}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {new Date(order.createdAt).toLocaleDateString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Products Tab */}
-        {activeTab === 'products' && (
-          <div className="bg-white rounded-lg shadow-md">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">Products</h2>
-                <Link
-                  to="/admin/products/new"
-                  className="flex items-center space-x-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors"
-                >
-                  <PlusIcon className="h-5 w-5" />
-                  <span>Add Product</span>
-                </Link>
-              </div>
-            </div>
+              <span className="text-white font-bold text-xl">Admin Panel</span>
+            </Link>
             
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Product
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Category
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Price
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Stock
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {products.map((product) => (
-                    <tr key={product._id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <img
-                            src={product.images?.[0]?.url || '/placeholder-product.jpg'}
-                            alt={product.name}
-                            className="h-10 w-10 rounded-lg object-cover mr-3"
-                          />
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3 bg-white/10 px-4 py-2 rounded-xl">
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold">{user.name?.charAt(0).toUpperCase()}</span>
+                </div>
+                <span className="text-white font-medium">{user.name}</span>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="flex items-center space-x-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 rounded-xl transition-all duration-300"
+              >
+                <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                <span className="font-medium">Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Welcome back, {user.name}!</h1>
+          <p className="text-purple-100">Manage your products, orders, and customers from here.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <Link to="/admin/products/new" className="flex items-center space-x-3 bg-white/10 backdrop-blur-xl p-4 rounded-xl hover:bg-white/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+              <PlusIcon className="h-6 w-6 text-green-400" />
+            </div>
+            <div>
+              <p className="text-white font-semibold">Add Product</p>
+              <p className="text-gray-400 text-sm">Create new product</p>
+            </div>
+          </Link>
+          
+          <Link to="/admin" className="flex items-center space-x-3 bg-white/10 backdrop-blur-xl p-4 rounded-xl hover:bg-white/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+              <CubeIcon className="h-6 w-6 text-blue-400" />
+            </div>
+            <div>
+              <p className="text-white font-semibold">Manage Products</p>
+              <p className="text-gray-400 text-sm">{products.length} products</p>
+            </div>
+          </Link>
+          
+          <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-xl p-4 rounded-xl">
+            <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center">
+              <ShoppingBagIcon className="h-6 w-6 text-orange-400" />
+            </div>
+            <div>
+              <p className="text-white font-semibold">View Orders</p>
+              <p className="text-gray-400 text-sm">{orders.length} orders</p>
+            </div>
+          </div>
+          
+          <Link to="/" className="flex items-center space-x-3 bg-white/10 backdrop-blur-xl p-4 rounded-xl hover:bg-white/20 transition-all duration-300">
+            <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
+              <ArrowLeftIcon className="h-6 w-6 text-purple-400" />
+            </div>
+            <div>
+              <p className="text-white font-semibold">Go to Store</p>
+              <p className="text-gray-400 text-sm">View your store</p>
+            </div>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">Total Orders</p>
+                <p className="text-3xl font-bold text-white">{stats.totalOrders}</p>
+              </div>
+              <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center">
+                <ShoppingBagIcon className="h-7 w-7 text-blue-400" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">Total Revenue</p>
+                <p className="text-3xl font-bold text-white">₹0</p>
+              </div>
+              <div className="w-14 h-14 bg-green-500/20 rounded-2xl flex items-center justify-center">
+                <CurrencyDollarIcon className="h-7 w-7 text-green-400" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">Total Products</p>
+                <p className="text-3xl font-bold text-white">{stats.totalProducts}</p>
+              </div>
+              <div className="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center">
+                <CubeIcon className="h-7 w-7 text-purple-400" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">Total Users</p>
+                <p className="text-3xl font-bold text-white">{stats.totalUsers}</p>
+              </div>
+              <div className="w-14 h-14 bg-orange-500/20 rounded-2xl flex items-center justify-center">
+                <UsersIcon className="h-7 w-7 text-orange-400" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+          <div className="p-6 border-b border-white/10 flex items-center justify-between">
+            <h2 className="text-xl font-bold text-white">Products</h2>
+            <Link to="/admin/products/new" className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-xl font-semibold hover:from-green-700 hover:to-blue-700 transition-all duration-300">
+              <PlusIcon className="h-5 w-5" />
+              <span>Add Product</span>
+            </Link>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-white/5">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Product</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Category</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Price</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Stock</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/10">
+                {products.length > 0 ? (
+                  products.map((product) => (
+                    <tr key={product._id} className="hover:bg-white/5 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center space-x-3">
+                          <img src={product.images?.[0]?.url || '/placeholder-product.jpg'} alt={product.name} className="w-12 h-12 rounded-lg object-cover" />
                           <div>
-                            <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                            <div className="text-sm text-gray-500">{product.brand}</div>
+                            <p className="text-white font-medium">{product.name}</p>
+                            <p className="text-gray-400 text-sm">{product.brand}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {product.category?.name || 'N/A'}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ₹{(product.discountPrice || product.price).toLocaleString('en-IN')}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {product.stock}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          product.isActive
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {product.isActive ? 'Active' : 'Inactive'}
+                      <td className="px-6 py-4 text-gray-300">{product.category?.name || 'N/A'}</td>
+                      <td className="px-6 py-4 text-white font-semibold">₹{product.price?.toLocaleString()}</td>
+                      <td className="px-6 py-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${product.stock > 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                          {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button className="text-primary-600 hover:text-primary-700">
-                            <EyeIcon className="h-5 w-5" />
-                          </button>
-                          <button className="text-indigo-600 hover:text-indigo-700">
-                            <PencilIcon className="h-5 w-5" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteProduct(product._id)}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <TrashIcon className="h-5 w-5" />
+                      <td className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          <Link to={`/admin/products/${product._id}`} className="p-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg transition-colors">
+                            <PencilIcon className="h-4 w-4" />
+                          </Link>
+                          <Link to={`/product/${product._id}`} target="_blank" className="p-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-lg transition-colors">
+                            <EyeIcon className="h-4 w-4" />
+                          </Link>
+                          <button onClick={() => handleDeleteProduct(product._id)} className="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors">
+                            <TrashIcon className="h-4 w-4" />
                           </button>
                         </div>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* Orders Tab */}
-        {activeTab === 'orders' && (
-          <div className="bg-white rounded-lg shadow-md">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">Orders</h2>
-                <div className="flex space-x-2">
-                  <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                    <option value="">All Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="processing">Processing</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                  ))
+                ) : (
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Order ID
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Customer
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Amount
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
+                    <td colSpan="5" className="px-6 py-12 text-center">
+                      <CubeIcon className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+                      <p className="text-gray-400">No products found. Add your first product!</p>
+                      <Link to="/admin/products/new" className="inline-flex items-center space-x-2 mt-4 px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-xl font-semibold">
+                        <PlusIcon className="h-5 w-5" />
+                        <span>Add Product</span>
+                      </Link>
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {orders.map((order) => (
-                    <tr key={order._id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        #{order._id.slice(-8)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {order.user?.name || 'N/A'}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ₹{order.totalPrice.toLocaleString('en-IN')}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden mt-8">
+          <div className="p-6 border-b border-white/10">
+            <h2 className="text-xl font-bold text-white">Recent Orders</h2>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-white/5">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Order ID</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Customer</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Total</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/10">
+                {orders.length > 0 ? (
+                  orders.slice(0, 10).map((order) => (
+                    <tr key={order._id} className="hover:bg-white/5 transition-colors">
+                      <td className="px-6 py-4 text-white font-mono text-sm">{order._id?.slice(-8)}</td>
+                      <td className="px-6 py-4 text-white font-medium">{order.shippingAddress?.fullName || 'N/A'}</td>
+                      <td className="px-6 py-4 text-white font-semibold">₹{order.totalAmount?.toLocaleString()}</td>
+                      <td className="px-6 py-4">
                         <select
-                          value={order.orderStatus}
+                          value={order.orderStatus || 'pending'}
                           onChange={(e) => handleUpdateOrderStatus(order._id, e.target.value)}
-                          className="border border-gray-300 rounded-lg px-3 py-1 text-sm"
+                          className="px-3 py-1 rounded-full text-xs font-medium border-0 cursor-pointer bg-gray-500/20 text-gray-400"
                         >
                           <option value="pending">Pending</option>
                           <option value="processing">Processing</option>
@@ -512,107 +367,21 @@ const AdminDashboard = () => {
                           <option value="cancelled">Cancelled</option>
                         </select>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(order.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button className="text-primary-600 hover:text-primary-700">
-                          <EyeIcon className="h-5 w-5" />
-                        </button>
-                      </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* Users Tab */}
-        {activeTab === 'users' && (
-          <div className="bg-white rounded-lg shadow-md">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">Users</h2>
-                <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    placeholder="Search users..."
-                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                  />
-                </div>
-              </div>
-            </div>
-            
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                  ))
+                ) : (
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      User
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Email
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Role
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Joined Date
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
+                    <td colSpan="4" className="px-6 py-12 text-center">
+                      <ShoppingBagIcon className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+                      <p className="text-gray-400">No orders found yet.</p>
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {users.map((user) => (
-                    <tr key={user._id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="h-10 w-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
-                            <span className="text-gray-600 font-semibold">
-                              {user.name.charAt(0).toUpperCase()}
-                            </span>
-                          </div>
-                          <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {user.email}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          user.role === 'admin'
-                            ? 'bg-purple-100 text-purple-800'
-                            : 'bg-gray-100 text-gray-800'
-                        }`}>
-                          {user.role}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(user.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button className="text-primary-600 hover:text-primary-700">
-                            <EyeIcon className="h-5 w-5" />
-                          </button>
-                          <button className="text-red-600 hover:text-red-700">
-                            <TrashIcon className="h-5 w-5" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                )}
+              </tbody>
+            </table>
           </div>
-        )}
+        </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

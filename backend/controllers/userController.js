@@ -13,7 +13,8 @@ const generateToken = (id) => {
 // @access  Public
 exports.register = async (req, res, next) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, role } = req.body;
+    console.log('Register request body:', req.body);
 
     // Check if user exists
     const userExists = await User.findOne({ email });
@@ -25,13 +26,21 @@ exports.register = async (req, res, next) => {
       });
     }
 
+    // Allow role from request body (for admin registration)
+    // Fall back to customer if not provided
+    const userRole = role === 'admin' ? 'admin' : 'customer';
+    console.log('Creating user with role:', userRole);
+
     // Create user
     const user = await User.create({
       name,
       email,
       password,
-      phone
+      phone,
+      role: userRole
     });
+
+    console.log('User created with role:', user.role);
 
     // Generate token
     const token = generateToken(user._id);
@@ -40,6 +49,7 @@ exports.register = async (req, res, next) => {
       success: true,
       token,
       user: {
+        _id: user._id,
         id: user._id,
         name: user.name,
         email: user.email,
@@ -69,6 +79,7 @@ exports.login = async (req, res, next) => {
 
     // Check for user
     const user = await User.findOne({ email }).select('+password');
+    console.log('Login - User found:', user);
 
     if (!user) {
       return res.status(401).json({
@@ -79,6 +90,8 @@ exports.login = async (req, res, next) => {
 
     // Check if password matches
     const isMatch = await user.matchPassword(password);
+    console.log('Login - Password match:', isMatch);
+    console.log('Login - User role:', user.role);
 
     if (!isMatch) {
       return res.status(401).json({
@@ -94,6 +107,7 @@ exports.login = async (req, res, next) => {
       success: true,
       token,
       user: {
+        _id: user._id,
         id: user._id,
         name: user.name,
         email: user.email,

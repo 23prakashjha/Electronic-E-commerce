@@ -322,7 +322,7 @@ const ProductsPage = () => {
                     onChange={(e) => handleFilterChange('minPrice', e.target.value)}
                     placeholder="Min"
                     className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all duration-300 bg-gray-50/50"
-                  />
+                  /><br/>
                   <input
                     type="number"
                     value={filters.maxPrice}

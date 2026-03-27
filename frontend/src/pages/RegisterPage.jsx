@@ -10,14 +10,12 @@ const RegisterPage = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    phone: '',
-    adminCode: '' // For admin registration
+    phone: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const [userType, setUserType] = useState('customer'); // 'customer' or 'admin'
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -27,7 +25,6 @@ const RegisterPage = () => {
       [e.target.name]: e.target.value
     });
     
-    // Clear error for this field when user starts typing
     if (errors[e.target.name]) {
       setErrors({
         ...errors,
@@ -67,15 +64,6 @@ const RegisterPage = () => {
       newErrors.phone = 'Please enter a valid 10-digit phone number';
     }
 
-    // Admin code validation for admin registration
-    if (userType === 'admin') {
-      if (!formData.adminCode.trim()) {
-        newErrors.adminCode = 'Admin code is required for admin registration';
-      } else if (formData.adminCode !== 'ADMIN123') {
-        newErrors.adminCode = 'Invalid admin code';
-      }
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -95,17 +83,11 @@ const RegisterPage = () => {
         email: formData.email,
         password: formData.password,
         phone: formData.phone,
-        role: userType,
-        adminCode: userType === 'admin' ? formData.adminCode : undefined
+        role: 'customer'
       });
       
-      toast.success(`${userType === 'admin' ? 'Admin' : 'Customer'} registration successful!`);
-      
-      if (userType === 'admin') {
-        navigate('/admin/login');
-      } else {
-        navigate('/login');
-      }
+      toast.success('Registration successful!');
+      navigate('/login');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Registration failed');
     } finally {
@@ -132,37 +114,7 @@ const RegisterPage = () => {
             <p className="text-gray-600 text-lg">Join us today and start shopping</p>
           </div>
 
-          {/* User Type Toggle */}
-          <div className="mb-8">
-            <div className="flex rounded-2xl bg-gray-100 p-1">
-              <button
-                type="button"
-                onClick={() => setUserType('customer')}
-                className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                  userType === 'customer'
-                    ? 'bg-white text-purple-600 shadow-lg transform scale-105'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Customer
-              </button>
-              <button
-                type="button"
-                onClick={() => setUserType('admin')}
-                className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                  userType === 'admin'
-                    ? 'bg-white text-purple-600 shadow-lg transform scale-105'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <ShieldCheckIcon className="h-4 w-4 inline mr-2" />
-                Admin
-              </button>
-            </div>
-          </div>
-
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name */}
             <div>
               <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2">
                 Full Name
@@ -184,7 +136,6 @@ const RegisterPage = () => {
               )}
             </div>
 
-            {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
                 Email Address
@@ -206,7 +157,6 @@ const RegisterPage = () => {
               )}
             </div>
 
-            {/* Phone */}
             <div>
               <label htmlFor="phone" className="block text-sm font-bold text-gray-700 mb-2">
                 Phone Number (Optional)
@@ -227,34 +177,6 @@ const RegisterPage = () => {
               )}
             </div>
 
-            {/* Admin Code - Only shown for admin registration */}
-            {userType === 'admin' && (
-              <div>
-                <label htmlFor="adminCode" className="block text-sm font-bold text-gray-700 mb-2">
-                  Admin Code *
-                </label>
-                <input
-                  type="text"
-                  id="adminCode"
-                  name="adminCode"
-                  value={formData.adminCode}
-                  onChange={handleChange}
-                  required={userType === 'admin'}
-                  className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 focus:bg-white transition-all duration-300 bg-gray-50/50 ${
-                    errors.adminCode ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  placeholder="Enter admin code"
-                />
-                {errors.adminCode && (
-                  <p className="mt-2 text-sm text-red-600 font-medium">{errors.adminCode}</p>
-                )}
-                <p className="mt-2 text-xs text-gray-500">
-                  Contact your system administrator for admin code
-                </p>
-              </div>
-            )}
-
-            {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-bold text-gray-700 mb-2">
                 Password
@@ -289,7 +211,6 @@ const RegisterPage = () => {
               )}
             </div>
 
-            {/* Confirm Password */}
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-bold text-gray-700 mb-2">
                 Confirm Password
@@ -324,7 +245,6 @@ const RegisterPage = () => {
               )}
             </div>
 
-            {/* Terms and Conditions */}
             <div className="flex items-start">
               <input
                 type="checkbox"
@@ -344,7 +264,6 @@ const RegisterPage = () => {
               </label>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
@@ -354,7 +273,6 @@ const RegisterPage = () => {
             </button>
           </form>
 
-          {/* Divider */}
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
@@ -364,7 +282,6 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          {/* Social Registration */}
           <div className="grid grid-cols-2 gap-4">
             <button className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 font-medium">
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -383,11 +300,16 @@ const RegisterPage = () => {
             </button>
           </div>
 
-          {/* Login link */}
           <p className="text-center text-gray-600 mt-8">
             Already have an account?{' '}
             <Link to="/login" className="text-purple-600 hover:text-purple-700 font-bold transition-colors duration-300">
               Sign in
+            </Link>
+          </p>
+          <p className="text-center text-gray-600 mt-4">
+            Are you an admin?{' '}
+            <Link to="/admin/register" className="text-purple-600 hover:text-purple-700 font-bold transition-colors duration-300">
+              Admin Register
             </Link>
           </p>
         </div>

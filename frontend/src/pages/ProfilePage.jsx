@@ -252,7 +252,7 @@ const ProfilePage = () => {
                           Account Type
                         </label>
                         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-800">
-                          {user?.role === 'admin' ? 'Administrator' : 'Customer'}
+                          Customer
                         </span>
                       </div>
                     </div>

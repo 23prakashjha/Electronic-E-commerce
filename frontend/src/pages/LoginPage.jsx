@@ -11,7 +11,6 @@ const LoginPage = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userType, setUserType] = useState('customer'); // 'customer' or 'admin'
   const { login, error } = useAuth();
   const navigate = useNavigate();
 
@@ -27,14 +26,9 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      await login(formData, userType);
-      toast.success(`${userType === 'admin' ? 'Admin' : 'User'} login successful!`);
-      
-      if (userType === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/');
-      }
+      await login(formData);
+      toast.success('Login successful!');
+      navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
     } finally {
@@ -61,37 +55,7 @@ const LoginPage = () => {
             <p className="text-gray-600 text-lg">Sign in to your account</p>
           </div>
 
-          {/* User Type Toggle */}
-          <div className="mb-8">
-            <div className="flex rounded-2xl bg-gray-100 p-1">
-              <button
-                type="button"
-                onClick={() => setUserType('customer')}
-                className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                  userType === 'customer'
-                    ? 'bg-white text-blue-600 shadow-lg transform scale-105'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Customer
-              </button>
-              <button
-                type="button"
-                onClick={() => setUserType('admin')}
-                className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                  userType === 'admin'
-                    ? 'bg-white text-blue-600 shadow-lg transform scale-105'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <ShieldCheckIcon className="h-4 w-4 inline mr-2" />
-                Admin
-              </button>
-            </div>
-          </div>
-
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
                 Email Address
@@ -108,7 +72,6 @@ const LoginPage = () => {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-bold text-gray-700 mb-2">
                 Password
@@ -138,7 +101,6 @@ const LoginPage = () => {
               </div>
             </div>
 
-            {/* Remember me & Forgot password */}
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
@@ -158,14 +120,12 @@ const LoginPage = () => {
               </Link>
             </div>
 
-            {/* Error Message */}
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl font-medium">
                 {error}
               </div>
             )}
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
@@ -175,7 +135,6 @@ const LoginPage = () => {
             </button>
           </form>
 
-          {/* Divider */}
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
@@ -185,7 +144,6 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* Social Login */}
           <div className="grid grid-cols-2 gap-4">
             <button className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 font-medium">
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -204,11 +162,16 @@ const LoginPage = () => {
             </button>
           </div>
 
-          {/* Sign up link */}
           <p className="text-center text-gray-600 mt-8">
             Don't have an account?{' '}
             <Link to="/register" className="text-blue-600 hover:text-blue-700 font-bold transition-colors duration-300">
               Sign up
+            </Link>
+          </p>
+          <p className="text-center text-gray-600 mt-4">
+            Are you an admin?{' '}
+            <Link to="/admin/login" className="text-purple-600 hover:text-purple-700 font-bold transition-colors duration-300">
+              Admin Login
             </Link>
           </p>
         </div>

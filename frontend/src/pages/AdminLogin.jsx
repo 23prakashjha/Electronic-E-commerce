@@ -36,10 +36,13 @@ const AdminLogin = () => {
       });
 
       const data = await response.json();
+      console.log('Full login response:', data);
 
       if (data.success) {
-        // Check if user is admin
-        if (data.user.role === 'admin') {
+        const userRole = data.user?.role;
+        console.log('User role from response:', userRole);
+        
+        if (userRole === 'admin') {
           localStorage.setItem('token', data.token);
           localStorage.setItem('user', JSON.stringify(data.user));
           toast.success('Admin login successful!');
@@ -59,24 +62,27 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
       
-      <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          {/* Admin Badge */}
+      <div className="relative w-full max-w-md">
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
-              <ShieldCheckIcon className="h-8 w-8 text-primary-600" />
+            <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 transform transition-all duration-300 hover:scale-110 hover:rotate-3">
+              <ShieldCheckIcon className="h-10 w-10 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Login</h1>
-            <p className="text-gray-600">Enter your admin credentials</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-2">
+              Admin Login
+            </h1>
+            <p className="text-gray-600 text-lg">Enter your admin credentials</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
                 Admin Email
               </label>
               <input
@@ -86,15 +92,14 @@ const AdminLogin = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 focus:bg-white transition-all duration-300 bg-gray-50/50"
                 placeholder="admin@example.com"
               />
             </div>
 
-            {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Admin Password
+              <label htmlFor="password" className="block text-sm font-bold text-gray-700 mb-2">
+                Password
               </label>
               <div className="relative">
                 <input
@@ -104,40 +109,46 @@ const AdminLogin = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="Enter your admin password"
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 focus:bg-white transition-all duration-300 bg-gray-50/50"
+                  placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 transition-colors duration-300"
                 >
                   {showPassword ? (
-                    <EyeSlashIcon className="h-5 w-5" />
+                    <EyeSlashIcon className="h-6 w-6" />
                   ) : (
-                    <EyeIcon className="h-5 w-5" />
+                    <EyeIcon className="h-6 w-6" />
                   )}
                 </button>
               </div>
             </div>
 
-            {/* Remember me */}
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="remember"
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember" className="ml-2 text-sm text-gray-600">
-                Remember me for 30 days
-              </label>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                />
+                <label htmlFor="remember" className="ml-2 text-sm text-gray-600">
+                  Remember me
+                </label>
+              </div>
+              <Link
+                to="/forgot-password"
+                className="text-sm text-purple-600 hover:text-purple-700 font-semibold transition-colors duration-300"
+              >
+                Forgot password?
+              </Link>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-4 rounded-xl font-bold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
             >
               {loading ? (
                 <>
@@ -150,44 +161,49 @@ const AdminLogin = () => {
               ) : (
                 <>
                   <ShieldCheckIcon className="h-5 w-5 mr-2" />
-                  Sign In as Admin
+                  Sign In
                 </>
               )}
             </button>
           </form>
 
-          {/* Security Notice */}
-          <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-xl">
             <div className="flex items-start space-x-3">
-              <ShieldCheckIcon className="h-5 w-5 text-yellow-600 mt-0.5" />
+              <ShieldCheckIcon className="h-5 w-5 text-purple-600 mt-0.5" />
               <div>
-                <h4 className="text-sm font-semibold text-yellow-800 mb-1">Security Notice</h4>
-                <p className="text-xs text-yellow-700">
-                  This is a restricted access area. Unauthorized access attempts are logged and may result in account suspension.
+                <h4 className="text-sm font-semibold text-purple-800 mb-1">Security Notice</h4>
+                <p className="text-xs text-purple-700">
+                  This is a restricted access area. Unauthorized access attempts are logged.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Links */}
-          <div className="mt-8 text-center space-y-4">
-            <Link
-              to="/forgot-password"
-              className="text-sm text-primary-600 hover:text-primary-700"
-            >
-              Forgot admin password?
-            </Link>
-            <div className="text-sm text-gray-600">
+          <div className="relative my-8">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white text-gray-500 font-medium">Or</span>
+            </div>
+          </div>
+
+          <div className="text-center space-y-4">
+            <p className="text-sm text-gray-600">
+              Don't have an admin account?{' '}
+              <Link to="/admin/register" className="text-purple-600 hover:text-purple-700 font-bold transition-colors duration-300">
+                Create Admin Account
+              </Link>
+            </p>
+            <p className="text-sm text-gray-600">
               Need regular user access?{' '}
-              <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+              <Link to="/login" className="text-purple-600 hover:text-purple-700 font-medium">
                 User Login
               </Link>
-            </div>
+            </p>
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };
