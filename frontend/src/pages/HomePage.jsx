@@ -26,8 +26,8 @@ const HomePage = () => {
       { threshold: 0.1 }
     );
 
-    document.querySelectorAll('section').forEach((section) => {
-      observer.observe(section);
+    document.querySelectorAll('[id]').forEach((el) => {
+      observer.observe(el);
     });
 
     return () => observer.disconnect();
@@ -194,9 +194,9 @@ const HomePage = () => {
   );
 
   const AnimatedSection = ({ id, children, delay = 0 }) => (
-    <section id={id} className={`transition-all duration-1000 transform ${isVisible[id] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: `${delay}ms` }}>
+    <div id={id} className={`transition-all duration-1000 transform ${isVisible[id] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: `${delay}ms` }}>
       {children}
-    </section>
+    </div>
   );
 
   return (
