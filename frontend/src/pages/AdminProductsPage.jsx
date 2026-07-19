@@ -7,12 +7,14 @@ import {
   TrashIcon,
   CubeIcon,
   ArrowRightOnRectangleIcon,
-  ArrowLeftIcon,
   MagnifyingGlassIcon,
   ChevronLeftIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  Bars3Icon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 const AdminProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -20,20 +22,19 @@ const AdminProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    
-    if (!token || user.role !== 'admin') {
+    if (!isAuthenticated || user?.role !== 'admin') {
       toast.error('Access denied. Admin privileges required.');
       navigate('/admin/login');
       return;
     }
 
     fetchProducts();
-  }, []);
+  }, [isAuthenticated, user]);
 
   const fetchProducts = async () => {
     try {
@@ -81,8 +82,6 @@ const AdminProductsPage = () => {
     navigate('/admin/login');
   };
 
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-
   const filteredProducts = products.filter(product =>
     product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -96,122 +95,145 @@ const AdminProductsPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-purple-500 border-t-transparent"></div>
+          <p className="text-gray-400 text-sm">Loading products...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div className="bg-white/10 backdrop-blur-xl border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/admin" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-xl">E</span>
+    <div className="min-h-screen bg-gray-950">
+      <nav className="bg-gray-900/80 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link to="/admin/dashboard" className="flex items-center space-x-3">
+              <div className="w-9 h-9 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
+                <span className="text-white font-bold text-lg">E</span>
               </div>
-              <span className="text-white font-bold text-xl">Admin Panel</span>
+              <span className="text-white font-bold text-lg hidden sm:block">Admin Panel</span>
             </Link>
             
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3 bg-white/10 px-4 py-2 rounded-xl">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold">{user.name?.charAt(0).toUpperCase()}</span>
+            <div className="hidden md:flex items-center space-x-3">
+              <div className="flex items-center space-x-2 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
+                <div className="w-7 h-7 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-xs">{user.name?.charAt(0).toUpperCase()}</span>
                 </div>
-                <span className="text-white font-medium">{user.name}</span>
+                <span className="text-white text-sm font-medium">{user.name}</span>
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center space-x-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 rounded-xl transition-all duration-300"
+                className="flex items-center space-x-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-xl transition-all duration-200 border border-red-500/10"
               >
+                <ArrowRightOnRectangleIcon className="h-4 w-4" />
+                <span className="text-sm font-medium">Logout</span>
+              </button>
+            </div>
+
+            <button onClick={() => setMobileNavOpen(!mobileNavOpen)} className="md:hidden p-2 text-gray-400 hover:text-white">
+              {mobileNavOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
+            </button>
+          </div>
+
+          {mobileNavOpen && (
+            <div className="md:hidden pb-4 border-t border-white/10 mt-2 pt-4">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-xs">{user.name?.charAt(0).toUpperCase()}</span>
+                </div>
+                <span className="text-white font-medium">{user.name}</span>
+              </div>
+              <button onClick={handleLogout} className="flex items-center space-x-2 px-4 py-2.5 bg-red-500/10 text-red-400 rounded-xl w-full">
                 <ArrowRightOnRectangleIcon className="h-5 w-5" />
                 <span className="font-medium">Logout</span>
               </button>
             </div>
-          </div>
+          )}
         </div>
-      </div>
+      </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-white">Manage Products</h1>
-            <p className="text-gray-400 mt-1">{products.length} products total</p>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Manage Products</h1>
+            <p className="text-gray-400 mt-1 text-sm">{filteredProducts.length} of {products.length} products</p>
           </div>
           <Link
             to="/admin/products/new"
-            className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-xl font-semibold hover:from-green-700 hover:to-blue-700 transition-all duration-300"
+            className="flex items-center space-x-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-emerald-600/20"
           >
             <PlusIcon className="h-5 w-5" />
             <span>Add Product</span>
           </Link>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
           <div className="p-4 border-b border-white/10">
-            <div className="relative max-w-md">
-              <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <div className="relative">
+              <MagnifyingGlassIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Search by name, brand, or category..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all text-sm"
               />
+              {searchTerm && (
+                <button onClick={() => { setSearchTerm(''); setCurrentPage(1); }} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300">
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+              )}
             </div>
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-white/5">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Product</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Category</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Brand</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Price</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Stock</th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">Actions</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Product</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Category</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Brand</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Price</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Stock</th>
+                  <th className="px-5 py-3 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/10">
+              <tbody className="divide-y divide-white/5">
                 {currentProducts.length > 0 ? (
                   currentProducts.map((product) => (
                     <tr key={product._id} className="hover:bg-white/5 transition-colors">
-                      <td className="px-6 py-4">
+                      <td className="px-5 py-3">
                         <div className="flex items-center space-x-3">
                           <img
                             src={product.images?.[0]?.url || '/placeholder-product.jpg'}
                             alt={product.name}
-                            className="w-14 h-14 rounded-lg object-cover"
+                            className="w-11 h-11 rounded-lg object-cover bg-white/10"
                           />
-                          <div>
-                            <p className="text-white font-medium">{product.name}</p>
-                            <p className="text-gray-400 text-sm">{product.description?.slice(0, 50)}...</p>
+                          <div className="min-w-0">
+                            <p className="text-white font-medium text-sm truncate max-w-[220px]">{product.name}</p>
+                            <p className="text-gray-500 text-xs truncate max-w-[220px]">{product.description?.slice(0, 50)}...</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <span className="text-gray-300">{product.category?.name || 'N/A'}</span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="text-gray-300">{product.brand || 'N/A'}</span>
-                      </td>
-                      <td className="px-6 py-4">
+                      <td className="px-5 py-3 text-gray-300 text-sm">{product.category?.name || 'N/A'}</td>
+                      <td className="px-5 py-3 text-gray-300 text-sm">{product.brand || 'N/A'}</td>
+                      <td className="px-5 py-3">
                         <div>
-                          <span className="text-white font-bold text-lg">₹{product.price?.toLocaleString()}</span>
+                          <span className="text-white font-bold text-sm">₹{product.price?.toLocaleString()}</span>
                           {product.discountPrice && (
-                            <div>
-                              <span className="text-gray-400 text-sm line-through">₹{product.discountPrice?.toLocaleString()}</span>
-                              <span className="ml-2 text-green-400 text-sm">
+                            <div className="flex items-center gap-2">
+                              <span className="text-gray-500 text-xs line-through">₹{product.discountPrice?.toLocaleString()}</span>
+                              <span className="text-green-400 text-xs font-medium">
                                 -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}%
                               </span>
                             </div>
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      <td className="px-5 py-3">
+                        <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           product.stock > 10 
                             ? 'bg-green-500/20 text-green-400' 
                             : product.stock > 0
@@ -221,29 +243,16 @@ const AdminProductsPage = () => {
                           {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center space-x-2">
-                          <Link
-                            to={`/admin/products/${product._id}`}
-                            className="p-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg transition-colors"
-                            title="Edit Product"
-                          >
-                            <PencilIcon className="h-5 w-5" />
+                      <td className="px-5 py-3 text-right">
+                        <div className="flex items-center justify-end space-x-1.5">
+                          <Link to={`/admin/products/${product._id}`} className="p-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-lg transition-colors" title="Edit">
+                            <PencilIcon className="h-4 w-4" />
                           </Link>
-                          <Link
-                            to={`/product/${product._id}`}
-                            target="_blank"
-                            className="p-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-lg transition-colors"
-                            title="View Product"
-                          >
-                            <EyeIcon className="h-5 w-5" />
+                          <Link to={`/product/${product._id}`} target="_blank" className="p-1.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 rounded-lg transition-colors" title="View">
+                            <EyeIcon className="h-4 w-4" />
                           </Link>
-                          <button
-                            onClick={() => handleDeleteProduct(product._id)}
-                            className="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors"
-                            title="Delete Product"
-                          >
-                            <TrashIcon className="h-5 w-5" />
+                          <button onClick={() => handleDeleteProduct(product._id)} className="p-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors" title="Delete">
+                            <TrashIcon className="h-4 w-4" />
                           </button>
                         </div>
                       </td>
@@ -251,14 +260,11 @@ const AdminProductsPage = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center">
-                      <CubeIcon className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                      <p className="text-gray-400 text-lg">No products found</p>
-                      <Link
-                        to="/admin/products/new"
-                        className="inline-flex items-center space-x-2 mt-4 px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-xl font-semibold"
-                      >
-                        <PlusIcon className="h-5 w-5" />
+                    <td colSpan="6" className="px-5 py-12 text-center">
+                      <CubeIcon className="h-12 w-12 text-gray-700 mx-auto mb-3" />
+                      <p className="text-gray-400 text-sm mb-3">No products found</p>
+                      <Link to="/admin/products/new" className="inline-flex items-center space-x-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold">
+                        <PlusIcon className="h-4 w-4" />
                         <span>Add First Product</span>
                       </Link>
                     </td>
@@ -268,38 +274,102 @@ const AdminProductsPage = () => {
             </table>
           </div>
 
+          <div className="md:hidden divide-y divide-white/5">
+            {currentProducts.length > 0 ? (
+              currentProducts.map((product) => (
+                <div key={product._id} className="p-4 hover:bg-white/5 transition-colors">
+                  <div className="flex items-start space-x-3">
+                    <img src={product.images?.[0]?.url || '/placeholder-product.jpg'} alt={product.name} className="w-14 h-14 rounded-lg object-cover bg-white/10 shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white font-medium text-sm truncate">{product.name}</p>
+                      <p className="text-gray-500 text-xs">{product.brand || 'N/A'} &middot; {product.category?.name || 'N/A'}</p>
+                      <div className="flex items-center gap-3 mt-2">
+                        <span className="text-white font-bold text-sm">₹{product.price?.toLocaleString()}</span>
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                          product.stock > 10 ? 'bg-green-500/20 text-green-400' : product.stock > 0 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'
+                        }`}>
+                          {product.stock > 0 ? `${product.stock}` : 'OOS'}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2 mt-2">
+                        <Link to={`/admin/products/${product._id}`} className="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg" title="Edit">
+                          <PencilIcon className="h-3.5 w-3.5" />
+                        </Link>
+                        <Link to={`/product/${product._id}`} target="_blank" className="p-1.5 bg-purple-500/10 text-purple-400 rounded-lg" title="View">
+                          <EyeIcon className="h-3.5 w-3.5" />
+                        </Link>
+                        <button onClick={() => handleDeleteProduct(product._id)} className="p-1.5 bg-red-500/10 text-red-400 rounded-lg" title="Delete">
+                          <TrashIcon className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="p-8 text-center">
+                <CubeIcon className="h-12 w-12 text-gray-700 mx-auto mb-3" />
+                <p className="text-gray-400 text-sm">No products found</p>
+              </div>
+            )}
+          </div>
+
           {totalPages > 1 && (
-            <div className="p-4 border-t border-white/10 flex items-center justify-between">
-              <p className="text-gray-400 text-sm">
-                Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredProducts.length)} of {filteredProducts.length} products
+            <div className="p-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <p className="text-gray-500 text-xs">
+                {indexOfFirstItem + 1}&ndash;{Math.min(indexOfLastItem, filteredProducts.length)} of {filteredProducts.length}
               </p>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5">
                 <button
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
-                  className="p-2 bg-white/10 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20"
+                  className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 disabled:opacity-30 disabled:cursor-not-allowed border border-white/5"
                 >
-                  <ChevronLeftIcon className="h-5 w-5" />
+                  <ChevronLeftIcon className="h-4 w-4" />
                 </button>
-                {[...Array(totalPages)].map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentPage(index + 1)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                      currentPage === index + 1
-                        ? 'bg-purple-600 text-white'
-                        : 'bg-white/10 text-white hover:bg-white/20'
-                    }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+                {[...Array(totalPages)].map((_, index) => {
+                  const page = index + 1;
+                  if (totalPages > 7) {
+                    if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentPage(page)}
+                          className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
+                            currentPage === page
+                              ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
+                              : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/5'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    }
+                    if (page === currentPage - 2 || page === currentPage + 2) {
+                      return <span key={index} className="text-gray-600 px-1">...</span>;
+                    }
+                    return null;
+                  }
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
+                        currentPage === page
+                          ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
+                          : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/5'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
                 <button
                   onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
-                  className="p-2 bg-white/10 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20"
+                  className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400 disabled:opacity-30 disabled:cursor-not-allowed border border-white/5"
                 >
-                  <ChevronRightIcon className="h-5 w-5" />
+                  <ChevronRightIcon className="h-4 w-4" />
                 </button>
               </div>
             </div>

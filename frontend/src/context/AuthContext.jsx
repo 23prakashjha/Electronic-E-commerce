@@ -66,16 +66,25 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Set axios default headers
+  // Set axios default headers and persist user
   useEffect(() => {
     if (state.token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
       localStorage.setItem('token', state.token);
+      if (state.user) {
+        localStorage.setItem('user', JSON.stringify(state.user));
+      }
     } else {
       delete axios.defaults.headers.common['Authorization'];
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     }
-  }, [state.token]);
+  }, [state.token, state.user]);
+
+  // Load user on mount if token exists
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   // Load user from token
   const loadUser = async () => {

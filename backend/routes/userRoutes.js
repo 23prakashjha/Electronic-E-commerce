@@ -1,5 +1,5 @@
 const express = require('express');
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const {
   register,
   login,
@@ -9,7 +9,10 @@ const {
   getAddresses,
   addToWishlist,
   removeFromWishlist,
-  getWishlist
+  getWishlist,
+  getUsers,
+  deleteUser,
+  createUser
 } = require('../controllers/userController');
 
 const router = express.Router();
@@ -18,6 +21,9 @@ router.post('/register', register);
 router.post('/login', login);
 router.get('/me', protect, getMe);
 router.put('/profile', protect, updateProfile);
+router.get('/', protect, authorize('admin'), getUsers);
+router.post('/', protect, authorize('admin'), createUser);
+router.delete('/:id', protect, authorize('admin'), deleteUser);
 router.post('/address', protect, addAddress);
 router.get('/address', protect, getAddresses);
 router.post('/wishlist', protect, addToWishlist);

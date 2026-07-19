@@ -120,6 +120,59 @@ exports.login = async (req, res, next) => {
   }
 };
 
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Private/Admin
+exports.getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({}).select('-password').sort({ createdAt: -1 });
+    res.status(200).json({ success: true, users });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Delete user
+// @route   DELETE /api/users/:id
+// @access  Private/Admin
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    if (user.role === 'admin') {
+      return res.status(400).json({ success: false, message: 'Cannot delete admin user' });
+    }
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json({ success: true, message: 'User deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Create user (admin)
+// @route   POST /api/users
+// @access  Private/Admin
+exports.createUser = async (req, res, next) => {
+  try {
+    const { name, email, password, phone, role } = req.body;
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ success: false, message: 'User already exists' });
+    }
+    const user = await User.create({ name, email, password, phone, role: role === 'admin' ? 'admin' : 'customer' });
+    const token = generateToken(user._id);
+    res.status(201).json({
+      success: true,
+      token,
+      user: { _id: user._id, id: user._id, name: user.name, email: user.email, role: user.role, phone: user.phone }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Get current logged in user
 // @route   GET /api/users/me
 // @access  Private

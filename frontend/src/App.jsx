@@ -14,14 +14,14 @@ import WishlistPage from './pages/WishlistPage';
 import OrdersPage from './pages/OrdersPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
-import AdminLogin from './pages/AdminLogin';
-import AdminRegister from './pages/AdminRegister';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminProductsPage from './pages/AdminProductsPage';
 import AdminOrdersPage from './pages/AdminOrdersPage';
+import AdminUsersPage from './pages/AdminUsersPage';
 import ProductForm from './pages/ProductForm';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 const AdminLayout = ({ children }) => (
   <>{children}</>
@@ -30,14 +30,16 @@ const AdminLayout = ({ children }) => (
 const MainLayout = ({ children }) => (
   <>
     <Navbar />
-    <main className="pt-20">{children}</main>
+    <main>{children}</main>
     <Footer />
   </>
 );
 
 function AppContent() {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin');
+  const isAdminRoute = location.pathname.startsWith('/admin') 
+    && !location.pathname.startsWith('/admin/login') 
+    && !location.pathname.startsWith('/admin/register');
   
   const Layout = isAdminRoute ? AdminLayout : MainLayout;
 
@@ -55,12 +57,15 @@ function AppContent() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/orders" element={<OrdersPage />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/register" element={<AdminRegister />} />
+        <Route path="/admin/login" element={<LoginPage />} />
+        <Route path="/admin/register" element={<RegisterPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/products" element={<AdminProductsPage />} />
+        <Route path="/admin/products/new" element={<ProductForm />} />
+        <Route path="/admin/products/:id" element={<ProductForm />} />
         <Route path="/admin/orders" element={<AdminOrdersPage />} />
+        <Route path="/admin/users" element={<AdminUsersPage />} />
       </Routes>
     </Layout>
   );
@@ -71,6 +76,7 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <Router>
+          <ScrollToTop />
           <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50/30">
             <AppContent />
           </div>
@@ -79,8 +85,13 @@ function App() {
             toastOptions={{
               duration: 4000,
               style: {
-                background: '#363636',
+                background: '#1e293b',
                 color: '#fff',
+                borderRadius: '12px',
+                padding: '12px 16px',
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
               },
               success: {
                 duration: 3000,
