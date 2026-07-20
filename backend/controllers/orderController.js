@@ -42,13 +42,18 @@ exports.createOrder = async (req, res, next) => {
       await product.save();
     }
 
+    const itemsPrice = orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const totalPrice = itemsPrice + taxPrice + shippingPrice;
+
     const order = await Order.create({
       user: req.user.id,
       orderItems,
       shippingAddress,
       paymentInfo,
+      itemsPrice,
       taxPrice,
       shippingPrice,
+      totalPrice,
       trackingUpdates: [{
         status: 'pending',
         location: shippingAddress.city + ', ' + shippingAddress.state,

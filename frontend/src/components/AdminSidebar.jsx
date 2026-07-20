@@ -48,7 +48,7 @@ const AdminSidebar = ({ open, onClose }) => {
       <aside className={`
         fixed top-0 left-0 h-full w-64 bg-gray-900 border-r border-white/10 z-50
         flex flex-col transition-transform duration-300 ease-in-out
-        lg:translate-x-0 lg:static lg:z-auto
+        lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 lg:z-auto
         ${open ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="flex items-center justify-between h-16 px-4 border-b border-white/10">
@@ -89,7 +89,6 @@ const AdminSidebar = ({ open, onClose }) => {
         <div className="px-3 py-4 border-t border-white/10 space-y-1">
           <Link
             to="/"
-            target="_blank"
             onClick={onClose}
             className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200 border border-transparent"
           >

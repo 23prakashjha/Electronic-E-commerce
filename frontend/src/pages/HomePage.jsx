@@ -5,9 +5,9 @@ import {
   Sparkles, ArrowRight, Package, CheckCircle, Mail, Headphones,
   Shield, Truck, ChevronLeft, ChevronRight, Eye, Clock, Users,
   Repeat, CreditCard, Gift, ShieldCheck, BookOpen, Smartphone,
-  Share2, LayoutGrid, Timer, ThumbsUp, Wallet,
+  Share2, Timer, ThumbsUp, Wallet,
   BadgeCheck, CircleDollarSign, RefreshCw, MessageSquare, MapPin,
-  HelpCircle, Tag, Store, Camera
+  HelpCircle, Store, Camera
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
@@ -52,7 +52,7 @@ const HERO_SLIDES = [
     cta: "Shop Now",
     ctaLink: "/products",
     badge: "UP TO 50% OFF",
-    features: ["Free Shipping on $50+", "30-Day Easy Returns", "No Cost EMI Available", "Cash on Delivery"]
+    features: ["Free Shipping on ₹500+", "30-Day Easy Returns", "No Cost EMI Available", "Cash on Delivery"]
   },
   {
     id: 2,
@@ -83,7 +83,7 @@ const HERO_SLIDES = [
     title: "Smart Home Revolution",
     subtitle: "Transform Your Home with Alexa & Google Compatible Devices",
     tagline: "Automate Your Lifestyle",
-    description: "Control your lights, thermostats, cameras, and appliances with just your voice. Build a connected smart home ecosystem that makes life easier, safer, and more energy-efficient — starting from just $29.",
+    description: "Control your lights, thermostats, cameras, and appliances with just your voice. Build a connected smart home ecosystem that makes life easier, safer, and more energy-efficient — starting from just ₹2,499.",
     image: heroSmart,
     cta: "Discover More",
     ctaLink: "/products?category=smart-home",
@@ -176,36 +176,6 @@ const HERO_SLIDES = [
   }
 ];
 
-const FALLBACK_FEATURED = [
-  { _id: "f1", name: "iPhone 15 Pro", price: 999, originalPrice: 1199, images: ["https://images.unsplash.com/photo-1592286115803-a1c3b552ee43?w=400&h=400&fit=crop"], ratings: { average: 4.8 }, discount: 17 },
-  { _id: "f2", name: "MacBook Air M2", price: 1099, originalPrice: 1299, images: ["https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop"], ratings: { average: 4.9 }, discount: 15 },
-  { _id: "f3", name: "AirPods Pro", price: 199, originalPrice: 249, images: ["https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?w=400&h=400&fit=crop"], ratings: { average: 4.7 }, discount: 20 },
-  { _id: "f4", name: "iPad Air", price: 599, originalPrice: 749, images: ["https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=400&fit=crop"], ratings: { average: 4.8 }, discount: 20 }
-];
-
-const FALLBACK_LATEST = [
-  { _id: "l1", name: "Samsung Galaxy S24", price: 899, images: ["https://images.unsplash.com/photo-1610945415295-d9bbf067e597?w=400&h=400&fit=crop"], ratings: { average: 4.7 }, isNew: true },
-  { _id: "l2", name: "Sony WH-1000XM5", price: 399, images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop"], ratings: { average: 4.8 }, isNew: true },
-  { _id: "l3", name: "Apple Watch Ultra", price: 799, images: ["https://images.unsplash.com/photo-1551816230-ef5deaed4a26?w=400&h=400&fit=crop"], ratings: { average: 4.9 }, isNew: true },
-  { _id: "l4", name: "Google Pixel 8", price: 699, images: ["https://images.unsplash.com/photo-1592286115803-a1c3b552ee43?w=400&h=400&fit=crop"], ratings: { average: 4.6 }, isNew: true }
-];
-
-const FALLBACK_TRENDING = [
-  { _id: "t1", name: "DJI Mini 3 Pro", price: 759, images: ["https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=400&fit=crop"], ratings: { average: 4.8 }, trending: true },
-  { _id: "t2", name: "Nintendo Switch", price: 299, images: ["https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400&h=400&fit=crop"], ratings: { average: 4.7 }, trending: true },
-  { _id: "t3", name: "GoPro Hero 12", price: 399, images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop"], ratings: { average: 4.6 }, trending: true },
-  { _id: "t4", name: "Kindle Oasis", price: 249, images: ["https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=400&fit=crop"], ratings: { average: 4.5 }, trending: true }
-];
-
-const FALLBACK_CATEGORIES = [
-  { name: "Smartphones", slug: "smartphones", icon: "📱", productCount: 245, color: "from-blue-500 to-blue-600", bgGradient: "from-blue-500/20 to-blue-600/10" },
-  { name: "Laptops", slug: "laptops", icon: "💻", productCount: 89, color: "from-purple-500 to-purple-600", bgGradient: "from-purple-500/20 to-purple-600/10" },
-  { name: "Headphones", slug: "headphones", icon: "🎧", productCount: 156, color: "from-green-500 to-green-600", bgGradient: "from-green-500/20 to-green-600/10" },
-  { name: "Cameras", slug: "cameras", icon: "📷", productCount: 67, color: "from-red-500 to-red-600", bgGradient: "from-red-500/20 to-red-600/10" },
-  { name: "Gaming", slug: "gaming", icon: "🎮", productCount: 134, color: "from-indigo-500 to-indigo-600", bgGradient: "from-indigo-500/20 to-indigo-600/10" },
-  { name: "Smart Home", slug: "smart-home", icon: "🏠", productCount: 98, color: "from-yellow-500 to-yellow-600", bgGradient: "from-yellow-500/20 to-yellow-600/10" }
-];
-
 const TESTIMONIALS = [
   { name: "Amit Sharma", rating: 5, text: "Amazing products and excellent customer service! Will definitely shop again.", avatar: boysAvatar },
   { name: "Priya Singh", rating: 5, text: "Fast delivery and authentic products. The best electronics store online!", avatar: girlsAvatar },
@@ -242,47 +212,6 @@ const BRANDS = [
   { name: "Vivo", productCount: 53, logo: vivoLogo },
   { name: "Motorola", productCount: 47, logo: motorolaLogo },
   { name: "Oppo", productCount: 51, logo: oppoLogo }
-];
-
-const DEAL_PRODUCTS = [
-  { id: "d1", name: "MacBook Air M2", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop", originalPrice: 1299, dealPrice: 749, discount: 42, rating: 4.8, reviews: 2847, badge: "Staff Pick" },
-  { id: "d2", name: "Sony WH-1000XM5", image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=400&h=400&fit=crop", originalPrice: 399, dealPrice: 229, discount: 43, rating: 4.7, reviews: 1532, badge: "Best Seller" },
-  { id: "d3", name: "Samsung Galaxy S24", image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&h=400&fit=crop", originalPrice: 999, dealPrice: 649, discount: 35, rating: 4.6, reviews: 3120, badge: "Hot Deal" },
-  { id: "d4", name: "iPad Pro 12.9\"", image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=400&fit=crop", originalPrice: 1099, dealPrice: 799, discount: 27, rating: 4.8, reviews: 1894, badge: "Limited" },
-  { id: "d5", name: "PS5 Console Bundle", image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400&h=400&fit=crop", originalPrice: 549, dealPrice: 429, discount: 22, rating: 4.9, reviews: 4201, badge: "Almost Gone" },
-  { id: "d6", name: "Dell XPS 15", image: "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400&h=400&fit=crop", originalPrice: 1499, dealPrice: 1099, discount: 27, rating: 4.5, reviews: 987, badge: "Flash Sale" },
-  { id: "d7", name: "Apple Watch Ultra 2", image: "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400&h=400&fit=crop", originalPrice: 799, dealPrice: 549, discount: 31, rating: 4.7, reviews: 1456, badge: "Top Rated" },
-  { id: "d8", name: "Bose QuietComfort 45", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop", originalPrice: 329, dealPrice: 199, discount: 40, rating: 4.6, reviews: 2103, badge: "Staff Pick" }
-];
-
-const BUNDLE_DEALS = [
-  {
-    id: "b1",
-    name: "Work From Home Essentials",
-    items: ["MacBook Air M2", "Magic Mouse", "USB-C Hub"],
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&h=400&fit=crop",
-    originalPrice: 1447,
-    bundlePrice: 1199,
-    discount: 17
-  },
-  {
-    id: "b2",
-    name: "Gamer Starter Pack",
-    items: ["Gaming Headset", "Mechanical Keyboard", "Gaming Mouse"],
-    image: "https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=500&h=400&fit=crop",
-    originalPrice: 447,
-    bundlePrice: 299,
-    discount: 33
-  },
-  {
-    id: "b3",
-    name: "Smart Home Starter",
-    items: ["Echo Dot", "Smart Bulb Pack", "Smart Plug"],
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=400&fit=crop",
-    originalPrice: 247,
-    bundlePrice: 179,
-    discount: 28
-  }
 ];
 
 const BLOG_POSTS = [
@@ -322,30 +251,6 @@ const SOCIAL_POSTS = [
   { id: "s4", image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&h=300&fit=crop" },
   { id: "s5", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" },
   { id: "s6", image: "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=300&h=300&fit=crop" }
-];
-
-const COMPARISON_PRODUCTS = [
-  {
-    name: "iPhone 15 Pro",
-    image: "https://images.unsplash.com/photo-1592286115803-a1c3b552ee43?w=300&h=300&fit=crop",
-    price: 999,
-    rating: 4.8,
-    specs: { display: '6.1" OLED', chip: 'A17 Pro', ram: '8 GB', storage: '256 GB', battery: '3274 mAh', camera: '48 MP' }
-  },
-  {
-    name: "Samsung Galaxy S24",
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e597?w=300&h=300&fit=crop",
-    price: 899,
-    rating: 4.7,
-    specs: { display: '6.2" AMOLED', chip: 'Snapdragon 8 Gen 3', ram: '8 GB', storage: '256 GB', battery: '4000 mAh', camera: '50 MP' }
-  },
-  {
-    name: "Google Pixel 8 Pro",
-    image: "https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=300&h=300&fit=crop",
-    price: 849,
-    rating: 4.6,
-    specs: { display: '6.7" LTPO OLED', chip: 'Tensor G3', ram: '12 GB', storage: '128 GB', battery: '5050 mAh', camera: '50 MP' }
-  }
 ];
 
 const WARRANTY_PLANS = [
@@ -421,33 +326,6 @@ const useFlashSaleTimer = () => {
 
   return [
     { value: String(days).padStart(2, '0'), label: 'Days' },
-    { value: String(hours).padStart(2, '0'), label: 'Hours' },
-    { value: String(minutes).padStart(2, '0'), label: 'Minutes' },
-    { value: String(seconds).padStart(2, '0'), label: 'Seconds' }
-  ];
-};
-
-const useDealOfTheDayTimer = () => {
-  const [timeLeft, setTimeLeft] = useState(() => {
-    const now = new Date();
-    const end = new Date(now);
-    end.setHours(23, 59, 59, 0);
-    return Math.max(0, Math.floor((end - now) / 1000));
-  });
-
-  useEffect(() => {
-    if (timeLeft <= 0) return;
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => Math.max(0, prev - 1));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [timeLeft > 0]);
-
-  const hours = Math.floor((timeLeft % 86400) / 3600);
-  const minutes = Math.floor((timeLeft % 3600) / 60);
-  const seconds = timeLeft % 60;
-
-  return [
     { value: String(hours).padStart(2, '0'), label: 'Hours' },
     { value: String(minutes).padStart(2, '0'), label: 'Minutes' },
     { value: String(seconds).padStart(2, '0'), label: 'Seconds' }
@@ -552,7 +430,6 @@ const HomePage = () => {
   const [loading, setLoading] = useState({ featured: true, latest: true, trending: true, categories: true });
 
   const timeLeft = useFlashSaleTimer();
-  const dealTimeLeft = useDealOfTheDayTimer();
 
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 500);
@@ -580,23 +457,17 @@ const HomePage = () => {
 
         if (featRes.status === 'fulfilled' && featRes.value.ok) {
           const data = await featRes.value.json();
-          setFeatured((data.products || data.data || data || []).slice(0, 4).map(normalizeProduct));
-        } else {
-          setFeatured(FALLBACK_FEATURED.map(normalizeProduct));
+          setFeatured((data.products || data.data || data || []).slice(0, 8).map(normalizeProduct));
         }
 
         if (latestRes.status === 'fulfilled' && latestRes.value.ok) {
           const data = await latestRes.value.json();
           setLatest((data.products || data.data || data || []).slice(0, 4).map(normalizeProduct));
-        } else {
-          setLatest(FALLBACK_LATEST.map(normalizeProduct));
         }
 
         if (trendRes.status === 'fulfilled' && trendRes.value.ok) {
           const data = await trendRes.value.json();
           setTrending((data.products || data.data || data || []).slice(0, 4).map(normalizeProduct));
-        } else {
-          setTrending(FALLBACK_TRENDING.map(normalizeProduct));
         }
 
         if (catRes.status === 'fulfilled' && catRes.value.ok) {
@@ -609,15 +480,10 @@ const HomePage = () => {
             color: c.color || 'from-gray-500 to-gray-600',
             bgGradient: c.bgGradient || 'from-gray-500/20 to-gray-600/10'
           }));
-          setCategories(cats.length > 0 ? cats : FALLBACK_CATEGORIES);
-        } else {
-          setCategories(FALLBACK_CATEGORIES);
+          if (cats.length > 0) setCategories(cats);
         }
       } catch {
-        setFeatured(FALLBACK_FEATURED.map(normalizeProduct));
-        setLatest(FALLBACK_LATEST.map(normalizeProduct));
-        setTrending(FALLBACK_TRENDING.map(normalizeProduct));
-        setCategories(FALLBACK_CATEGORIES);
+        // API unavailable — sections will show empty/loading state
       } finally {
         setLoading({ featured: false, latest: false, trending: false, categories: false });
       }
@@ -726,10 +592,10 @@ const HomePage = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              ${product.price}
+              ₹{product.price.toLocaleString('en-IN')}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-sm text-gray-400 line-through font-medium">${product.originalPrice}</span>
+              <span className="text-sm text-gray-400 line-through font-medium">₹{product.originalPrice.toLocaleString('en-IN')}</span>
             )}
           </div>
         </div>
@@ -752,11 +618,11 @@ const HomePage = () => {
         <div className="animate-marquee whitespace-nowrap flex items-center gap-8 text-sm font-medium">
           {Array(3).fill(null).map((_, i) => (
             <React.Fragment key={i}>
-              <span className="inline-flex items-center gap-2"><Zap className="w-3.5 h-3.5 text-yellow-300" /> FREE SHIPPING on orders over $50</span>
+              <span className="inline-flex items-center gap-2"><Zap className="w-3.5 h-3.5 text-yellow-300" /> FREE SHIPPING on orders over ₹500</span>
               <span className="inline-flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-yellow-300" /> Flash Sale — Up to 70% OFF!</span>
               <span className="inline-flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-yellow-300" /> 100% Genuine Products</span>
               <span className="inline-flex items-center gap-2"><Headphones className="w-3.5 h-3.5 text-yellow-300" /> 24/7 Customer Support</span>
-              <span className="inline-flex items-center gap-2"><Gift className="w-3.5 h-3.5 text-yellow-300" /> Refer & Earn $20</span>
+              <span className="inline-flex items-center gap-2"><Gift className="w-3.5 h-3.5 text-yellow-300" /> Refer & Earn ₹200</span>
             </React.Fragment>
           ))}
         </div>
@@ -897,9 +763,11 @@ const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {loading.featured
               ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
-              : featured.map((product) => (
-                  <ProductCard key={product._id} product={product} showDiscount />
-                ))
+              : featured.length > 0
+                ? featured.map((product) => (
+                    <ProductCard key={product._id} product={product} showDiscount />
+                  ))
+                : <p className="col-span-full text-center text-gray-400 py-12">No featured products available</p>
             }
           </div>
         </div>
@@ -1012,70 +880,17 @@ const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {loading.latest
               ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
-              : latest.map((product) => (
-                  <ProductCard key={product._id} product={product} showNew />
-                ))
+              : latest.length > 0
+                ? latest.map((product) => (
+                    <ProductCard key={product._id} product={product} showNew />
+                  ))
+                : <p className="col-span-full text-center text-gray-400 py-12">No new arrivals yet</p>
             }
           </div>
         </div>
       </section>
 
-      {/* ==================== 6. BUNDLE DEALS ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-orange-50/50 via-rose-50/30 to-amber-50/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            badge="from-red-100 to-orange-100"
-            title="Bundle Deals"
-            subtitle="Save big when you buy together — exclusive combo offers"
-            gradient="from-red-600 to-orange-600"
-            icon={Tag}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {BUNDLE_DEALS.map((bundle) => (
-              <div
-                key={bundle.id}
-                className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-red-200 transform hover:-translate-y-2"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={bundle.image}
-                    alt={bundle.name}
-                    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-4 left-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                    Save {bundle.discount}%
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-red-600 transition-colors">{bundle.name}</h3>
-                  <div className="space-y-2 mb-4">
-                    {bundle.items.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-gray-600">
-                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        <span className="text-sm">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">${bundle.bundlePrice}</span>
-                    <span className="text-gray-400 line-through text-lg">${bundle.originalPrice}</span>
-                  </div>
-                  <button
-                    onClick={() => toast.success(`${bundle.name} bundle added!`)}
-                    className="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white py-3 rounded-xl font-bold hover:from-red-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-[1.02] shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-                  >
-                    <ShoppingCart className="w-5 h-5" />
-                    Get Bundle
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== 7. FLASH SALE ==================== */}
+      {/* ==================== 6. FLASH SALE ==================== */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-rose-600 via-orange-500 to-amber-500 text-white relative overflow-hidden" data-section="flashsale">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-20" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1101,9 +916,11 @@ const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {loading.featured
               ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
-              : featured.slice(0, 4).map((product) => (
-                  <ProductCard key={product._id} product={product} showDiscount />
-                ))
+              : featured.slice(0, 4).length > 0
+                ? featured.slice(0, 4).map((product) => (
+                    <ProductCard key={product._id} product={product} showDiscount />
+                  ))
+                : <p className="col-span-full text-center text-white/60 py-12">No flash sale products right now</p>
             }
           </div>
         </div>
@@ -1122,144 +939,17 @@ const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {loading.trending
               ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
-              : trending.map((product) => (
-                  <ProductCard key={product._id} product={product} showTrending />
-                ))
+              : trending.length > 0
+                ? trending.map((product) => (
+                    <ProductCard key={product._id} product={product} showTrending />
+                  ))
+                : <p className="col-span-full text-center text-gray-400 py-12">No trending products yet</p>
             }
           </div>
         </div>
       </section>
 
-      {/* ==================== 9. DEAL OF THE DAY ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-[#1a1147] via-[#2d1b69] to-[#1e1152] text-white relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl" />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-yellow-500/20 backdrop-blur-xl px-5 py-2.5 rounded-full mb-6 border border-yellow-500/30">
-              <Clock className="w-5 h-5 text-yellow-400" />
-              <span className="text-yellow-400 font-semibold text-sm">Expires Today!</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Deal of the Day</h2>
-            <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-8">Hurry up! These deals expire at midnight</p>
-            <div className="flex justify-center gap-3 md:gap-4">
-              {dealTimeLeft.map((item, i) => (
-                <div key={i} className="bg-white/10 backdrop-blur-xl rounded-2xl px-5 py-3 md:px-6 md:py-4 text-center border border-white/10">
-                  <div className="text-2xl md:text-3xl font-bold tabular-nums">{item.value}</div>
-                  <div className="text-xs text-gray-400 mt-1">{item.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-            {DEAL_PRODUCTS.map((product) => (
-              <div key={product.id} className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-yellow-400/50 hover:bg-white/15 transition-all duration-300 transform hover:-translate-y-1 group">
-                <div className="relative overflow-hidden">
-                  <img
-                    src={getImageUrl(product.image)}
-                    alt={product.name}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-3 py-1 rounded-full text-xs font-bold">
-                    {product.discount}% OFF
-                  </div>
-                  <div className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                    {product.badge}
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-bold text-white text-sm md:text-base mb-2 line-clamp-1">{product.name}</h3>
-                  <div className="flex items-center gap-1 mb-3">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className={`w-3.5 h-3.5 ${i < Math.floor(product.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-500'}`} />
-                    ))}
-                    <span className="text-gray-400 text-xs ml-1">({product.reviews.toLocaleString()})</span>
-                  </div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-xl font-bold text-yellow-400">${product.dealPrice}</span>
-                    <span className="text-sm text-gray-400 line-through">${product.originalPrice}</span>
-                  </div>
-                  <button
-                    onClick={() => toast.success(`${product.name} added to cart!`)}
-                    className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 py-2.5 rounded-xl font-bold text-sm hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <ShoppingCart className="w-4 h-4" />
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== 10. TOP PICKS COMPARISON ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-indigo-50/40 via-blue-50/30 to-sky-50/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            badge="from-indigo-100 to-blue-100"
-            title="Compare Top Picks"
-            subtitle="Side-by-side comparison of our best flagship phones"
-            gradient="from-indigo-600 to-blue-600"
-            icon={LayoutGrid}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {COMPARISON_PRODUCTS.map((product, idx) => (
-              <div
-                key={idx}
-                className={`bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border ${idx === 1 ? 'border-indigo-200 ring-2 ring-indigo-100 md:scale-[1.02]' : 'border-gray-100'} transform hover:-translate-y-2`}
-              >
-                {idx === 1 && (
-                  <div className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white text-center py-2 text-sm font-bold">
-                    BEST VALUE
-                  </div>
-                )}
-                <div className="p-6">
-                  <div className="flex justify-center mb-6">
-                    <img
-                      src={getImageUrl(product.image)}
-                      alt={product.name}
-                      className="w-32 h-32 object-cover rounded-2xl"
-                      loading="lazy"
-                    />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 text-center mb-2">{product.name}</h3>
-                  <div className="flex items-center justify-center gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
-                    ))}
-                    <span className="text-sm text-gray-500 ml-1">{product.rating}</span>
-                  </div>
-                  <div className="text-center mb-6">
-                    <span className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">${product.price}</span>
-                  </div>
-                  <div className="space-y-3 mb-6">
-                    {Object.entries(product.specs).map(([key, value]) => (
-                      <div key={key} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
-                        <span className="text-gray-500 text-sm capitalize">{key}</span>
-                        <span className="font-semibold text-gray-800 text-sm">{value}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => toast.success(`${product.name} added to cart!`)}
-                    className={`w-full py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2 ${idx === 1 ? 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white hover:from-indigo-600 hover:to-blue-600 shadow-lg' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
-                  >
-                    <ShoppingCart className="w-5 h-5" />
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== 11. MEGA DISCOUNT ==================== */}
+      {/* ==================== 9. MEGA DISCOUNT ==================== */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-[#0a0f24] via-[#1a1450] to-[#0d1333] text-white relative overflow-hidden" data-section="megadiscount">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
@@ -1311,7 +1001,7 @@ const HomePage = () => {
                 <div className="relative z-10">
                   <span className="text-xs font-semibold uppercase tracking-wider opacity-80">{card.label}</span>
                   <div className="flex items-center gap-1 mt-2 mb-4">
-                    <span className="text-4xl md:text-5xl font-bold">${card.amount}</span>
+                    <span className="text-4xl md:text-5xl font-bold">₹{card.amount.toLocaleString('en-IN')}</span>
                   </div>
                   <div className="flex items-center gap-2 mb-6">
                     <Gift className="w-4 h-4 opacity-80" />
@@ -1355,7 +1045,7 @@ const HomePage = () => {
                   <h3 className="text-2xl font-bold text-gray-800 mb-1">{plan.name}</h3>
                   <p className="text-gray-500 text-sm mb-4">{plan.period} Coverage</p>
                   <div className="flex items-baseline gap-1 mb-6">
-                    <span className="text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">${plan.price}</span>
+                    <span className="text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">₹{plan.price}</span>
                     <span className="text-gray-400">/{plan.period}</span>
                   </div>
                   <div className="space-y-3 mb-8">
@@ -1385,7 +1075,7 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {[
-              { icon: Truck, title: "Free Shipping", desc: "On orders over $50" },
+              { icon: Truck, title: "Free Shipping", desc: "On orders over ₹500" },
               { icon: Shield, title: "Secure Payment", desc: "100% secure transactions" },
               { icon: Headphones, title: "24/7 Support", desc: "Dedicated customer service" }
             ].map((item, index) => (
@@ -1694,7 +1384,7 @@ const HomePage = () => {
               <span className="font-semibold text-sm">Referral Program</span>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              Refer & Earn <span className="text-yellow-300">$20</span>
+              Refer & Earn <span className="text-yellow-300">₹200</span>
             </h2>
             <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">Share ElectroShop with friends and earn rewards for every successful referral</p>
           </div>
@@ -1702,7 +1392,7 @@ const HomePage = () => {
             {[
               { step: "01", icon: Share2, title: "Share Your Link", desc: "Get your unique referral link from your account dashboard" },
               { step: "02", icon: Users, title: "Friend Signs Up", desc: "Your friend creates an account using your referral link" },
-              { step: "03", icon: CreditCard, title: "You Both Earn", desc: "You get $20 credit and your friend gets 15% off first order" }
+              { step: "03", icon: CreditCard, title: "You Both Earn", desc: "You get ₹200 credit and your friend gets 15% off first order" }
             ].map((item, idx) => (
               <div
                 key={idx}

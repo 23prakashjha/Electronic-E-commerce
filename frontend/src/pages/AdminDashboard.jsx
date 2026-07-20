@@ -104,7 +104,7 @@ const AdminDashboard = () => {
       
       setStats({
         totalOrders: ordersData.orders?.length || 0,
-        totalRevenue: 0,
+        totalRevenue: (ordersData.orders || []).reduce((sum, o) => sum + (o.totalPrice || 0), 0),
         totalUsers: usersData.users?.length || 0,
         totalProducts: productsData.products?.length || 0
       });
@@ -356,7 +356,7 @@ const AdminDashboard = () => {
                     <tr key={order._id} className="hover:bg-white/5 transition-colors">
                       <td className="px-5 py-3 text-white font-mono text-xs">#{order._id?.slice(-8).toUpperCase()}</td>
                       <td className="px-5 py-3 text-white text-sm">{order.shippingAddress?.fullName || 'N/A'}</td>
-                      <td className="px-5 py-3 text-white font-semibold text-sm">₹{order.totalAmount?.toLocaleString()}</td>
+                      <td className="px-5 py-3 text-white font-semibold text-sm">₹{order.totalPrice?.toLocaleString()}</td>
                       <td className="px-5 py-3">
                         <select
                           value={order.orderStatus || 'pending'}
@@ -396,7 +396,7 @@ const AdminDashboard = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-400 text-sm">{order.shippingAddress?.fullName || 'N/A'}</span>
-                    <span className="text-white font-bold text-sm">₹{order.totalAmount?.toLocaleString()}</span>
+                    <span className="text-white font-bold text-sm">₹{order.totalPrice?.toLocaleString()}</span>
                   </div>
                 </div>
               ))
