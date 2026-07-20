@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   UsersIcon, TrashIcon, PlusIcon, MagnifyingGlassIcon,
-  ArrowRightOnRectangleIcon, ArrowLeftIcon, Bars3Icon, XMarkIcon,
-  ShieldCheckIcon, UserIcon, EnvelopeIcon, PhoneIcon, CheckCircleIcon
+  ArrowLeftIcon, XMarkIcon, ShieldCheckIcon, UserIcon, EnvelopeIcon, PhoneIcon, CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -13,7 +12,6 @@ const AdminUsersPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState('all');
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [addForm, setAddForm] = useState({ name: '', email: '', password: '', phone: '', role: 'customer' });
   const [addLoading, setAddLoading] = useState(false);
@@ -97,12 +95,6 @@ const AdminUsersPage = () => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    toast.success('Logged out successfully');
-    navigate('/');
-  };
-
   const filteredUsers = users.filter(u => {
     const matchesSearch = u.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       u.email?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -114,54 +106,8 @@ const AdminUsersPage = () => {
   const customerCount = users.filter(u => u.role === 'customer').length;
 
   return (
-    <div className="min-h-screen bg-gray-950">
-      {/* Top Nav */}
-      <nav className="bg-gray-900 border-b border-white/10 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
-              <button onClick={() => setMobileNavOpen(!mobileNavOpen)} className="lg:hidden p-2 rounded-lg hover:bg-white/10">
-                {mobileNavOpen ? <XMarkIcon className="h-6 w-6 text-white" /> : <Bars3Icon className="h-6 w-6 text-white" />}
-              </button>
-              <Link to="/admin/dashboard" className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">E</span>
-                </div>
-                <span className="text-white font-bold hidden sm:block">Admin Panel</span>
-              </Link>
-            </div>
-            <div className="flex items-center gap-3">
-              <Link to="/" className="text-gray-400 hover:text-white transition-colors text-sm hidden sm:block">View Store</Link>
-              <button onClick={handleLogout} className="flex items-center gap-2 text-gray-400 hover:text-red-400 transition-colors text-sm">
-                <ArrowRightOnRectangleIcon className="h-4 w-4" />
-                <span className="hidden sm:block">Logout</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Nav */}
-      {mobileNavOpen && (
-        <>
-          <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setMobileNavOpen(false)} />
-          <div className="fixed top-16 left-0 right-0 bg-gray-900 border-b border-white/10 z-40 lg:hidden p-4 space-y-2">
-            {[
-              { to: '/admin/dashboard', label: 'Dashboard' },
-              { to: '/admin/products', label: 'Products' },
-              { to: '/admin/orders', label: 'Orders' },
-              { to: '/admin/users', label: 'Users', active: true },
-            ].map((link) => (
-              <Link key={link.to} to={link.to} onClick={() => setMobileNavOpen(false)}
-                className={`block px-4 py-3 rounded-xl font-semibold text-sm ${link.active ? 'bg-purple-500/20 text-purple-400' : 'text-gray-300 hover:bg-white/5'}`}>
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </>
-      )}
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -386,7 +332,7 @@ const AdminUsersPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

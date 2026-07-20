@@ -9,14 +9,11 @@ import {
   PencilIcon,
   TrashIcon,
   CubeIcon,
-  ArrowRightOnRectangleIcon,
-  ArrowLeftIcon,
-  Bars3Icon,
-  XMarkIcon,
   ChartBarIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import getImageUrl from '../utils/getImageUrl';
 
 const useAnimatedCounter = (target, duration = 1200) => {
   const [count, setCount] = useState(0);
@@ -74,7 +71,6 @@ const AdminDashboard = () => {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
 
@@ -117,13 +113,6 @@ const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    toast.success('Logged out successfully');
-    navigate('/admin/login');
   };
 
   const handleDeleteProduct = async (productId) => {
@@ -188,7 +177,7 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="flex items-center justify-center py-20">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-10 w-10 border-2 border-purple-500 border-t-transparent"></div>
           <p className="text-gray-400 text-sm">Loading dashboard...</p>
@@ -198,62 +187,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950">
-      <nav className="bg-gray-900/80 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/admin/dashboard" className="flex items-center space-x-3">
-              <div className="w-9 h-9 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
-                <span className="text-white font-bold text-lg">E</span>
-              </div>
-              <span className="text-white font-bold text-lg hidden sm:block">Admin Panel</span>
-            </Link>
-            
-            <div className="hidden md:flex items-center space-x-3">
-              <div className="flex items-center space-x-2 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
-                <div className="w-7 h-7 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-xs">{user.name?.charAt(0).toUpperCase()}</span>
-                </div>
-                <span className="text-white text-sm font-medium">{user.name}</span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="flex items-center space-x-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-xl transition-all duration-200 border border-red-500/10"
-              >
-                <ArrowRightOnRectangleIcon className="h-4 w-4" />
-                <span className="text-sm font-medium">Logout</span>
-              </button>
-            </div>
-
-            <button
-              onClick={() => setMobileNavOpen(!mobileNavOpen)}
-              className="md:hidden p-2 text-gray-400 hover:text-white"
-            >
-              {mobileNavOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
-            </button>
-          </div>
-
-          {mobileNavOpen && (
-            <div className="md:hidden pb-4 border-t border-white/10 mt-2 pt-4">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-xs">{user.name?.charAt(0).toUpperCase()}</span>
-                </div>
-                <span className="text-white font-medium">{user.name}</span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="flex items-center space-x-2 px-4 py-2.5 bg-red-500/10 text-red-400 rounded-xl w-full"
-              >
-                <ArrowRightOnRectangleIcon className="h-5 w-5" />
-                <span className="font-medium">Logout</span>
-              </button>
-            </div>
-          )}
-        </div>
-      </nav>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 p-6 sm:p-8 mb-8">
           <div className="absolute inset-0">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
@@ -320,7 +254,7 @@ const AdminDashboard = () => {
                     <tr key={product._id} className="hover:bg-white/5 transition-colors">
                       <td className="px-5 py-3">
                         <div className="flex items-center space-x-3">
-                          <img src={product.images?.[0]?.url || '/placeholder-product.jpg'} alt={product.name} className="w-10 h-10 rounded-lg object-cover bg-white/10" />
+                          <img src={getImageUrl(product.images?.[0]?.url)} alt={product.name} className="w-10 h-10 rounded-lg object-cover bg-white/10" />
                           <div className="min-w-0">
                             <p className="text-white font-medium text-sm truncate max-w-[200px]">{product.name}</p>
                             <p className="text-gray-500 text-xs">{product.brand}</p>
@@ -370,7 +304,7 @@ const AdminDashboard = () => {
               products.slice(0, 6).map((product) => (
                 <div key={product._id} className="p-4 hover:bg-white/5 transition-colors">
                   <div className="flex items-start space-x-3">
-                    <img src={product.images?.[0]?.url || '/placeholder-product.jpg'} alt={product.name} className="w-12 h-12 rounded-lg object-cover bg-white/10 shrink-0" />
+                    <img src={getImageUrl(product.images?.[0]?.url)} alt={product.name} className="w-12 h-12 rounded-lg object-cover bg-white/10 shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-white font-medium text-sm truncate">{product.name}</p>
                       <p className="text-gray-500 text-xs">{product.brand} &middot; {product.category?.name || 'N/A'}</p>
@@ -474,7 +408,6 @@ const AdminDashboard = () => {
             )}
           </div>
         </div>
-      </div>
     </div>
   );
 };

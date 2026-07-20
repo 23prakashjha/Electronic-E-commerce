@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import getImageUrl from '../utils/getImageUrl';
 
 // Initial state
 const initialState = {
@@ -133,7 +134,7 @@ export const CartProvider = ({ children }) => {
       product: product._id,
       name: product.name,
       price: product.discountPrice || product.price,
-      image: product.images[0]?.url || '/placeholder-product.jpg',
+      image: getImageUrl(product.images[0]?.url),
       quantity
     };
 

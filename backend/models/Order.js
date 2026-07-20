@@ -115,6 +115,26 @@ const orderSchema = new mongoose.Schema({
   trackingNumber: {
     type: String
   },
+  estimatedDelivery: {
+    type: Date
+  },
+  currentLocation: {
+    type: String
+  },
+  deliveryPartner: {
+    name: String,
+    phone: String,
+    vehicleNumber: String
+  },
+  trackingUpdates: [{
+    status: String,
+    location: String,
+    timestamp: {
+      type: Date,
+      default: Date.now
+    },
+    note: String
+  }],
   notes: {
     type: String,
     maxlength: [500, 'Order notes cannot exceed 500 characters']

@@ -3,24 +3,38 @@ import { Link, useNavigate } from 'react-router-dom';
 import { 
   ShoppingBagIcon,
   EyeIcon,
-  ArrowRightOnRectangleIcon,
   ArrowLeftIcon,
   TruckIcon,
   CheckCircleIcon,
   XCircleIcon,
   ClockIcon,
   CubeIcon,
-  Bars3Icon,
-  XMarkIcon
+  XMarkIcon,
+  MapPinIcon,
+  PhoneIcon,
+  UserIcon,
+  CalendarIcon,
+  PencilSquareIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import getImageUrl from '../utils/getImageUrl';
 
 const AdminOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState('all');
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [editingOrder, setEditingOrder] = useState(null);
+  const [trackingForm, setTrackingForm] = useState({
+    orderStatus: '',
+    trackingNumber: '',
+    estimatedDelivery: '',
+    currentLocation: '',
+    deliveryPartnerName: '',
+    deliveryPartnerPhone: '',
+    deliveryPartnerVehicle: '',
+    trackingNote: ''
+  });
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
 
@@ -52,7 +66,7 @@ const AdminOrdersPage = () => {
     }
   };
 
-  const handleUpdateOrderStatus = async (orderId, status) => {
+  const handleUpdateOrderStatus = async (orderId) => {
     try {
       const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
         method: 'PUT',
@@ -60,26 +74,56 @@ const AdminOrdersPage = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ orderStatus: status })
+        body: JSON.stringify({
+          orderStatus: trackingForm.orderStatus,
+          trackingNumber: trackingForm.trackingNumber || undefined,
+          estimatedDelivery: trackingForm.estimatedDelivery || undefined,
+          currentLocation: trackingForm.currentLocation || undefined,
+          deliveryPartner: {
+            name: trackingForm.deliveryPartnerName || undefined,
+            phone: trackingForm.deliveryPartnerPhone || undefined,
+            vehicleNumber: trackingForm.deliveryPartnerVehicle || undefined
+          },
+          trackingNote: trackingForm.trackingNote || undefined
+        })
       });
       
       if (response.ok) {
+        const data = await response.json();
         setOrders(orders.map(order => 
-          order._id === orderId ? { ...order, orderStatus: status } : order
+          order._id === orderId ? data.order : order
         ));
-        toast.success('Order status updated');
+        setEditingOrder(null);
+        setTrackingForm({
+          orderStatus: '',
+          trackingNumber: '',
+          estimatedDelivery: '',
+          currentLocation: '',
+          deliveryPartnerName: '',
+          deliveryPartnerPhone: '',
+          deliveryPartnerVehicle: '',
+          trackingNote: ''
+        });
+        toast.success('Order updated successfully');
       }
     } catch (error) {
       console.error('Error updating order:', error);
-      toast.error('Failed to update order status');
+      toast.error('Failed to update order');
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    toast.success('Logged out successfully');
-    navigate('/admin/login');
+  const openTrackingForm = (order) => {
+    setEditingOrder(order._id);
+    setTrackingForm({
+      orderStatus: order.orderStatus || 'pending',
+      trackingNumber: order.trackingNumber || '',
+      estimatedDelivery: order.estimatedDelivery ? new Date(order.estimatedDelivery).toISOString().split('T')[0] : '',
+      currentLocation: order.currentLocation || '',
+      deliveryPartnerName: order.deliveryPartner?.name || '',
+      deliveryPartnerPhone: order.deliveryPartner?.phone || '',
+      deliveryPartnerVehicle: order.deliveryPartner?.vehicleNumber || '',
+      trackingNote: ''
+    });
   };
 
   const filteredOrders = filterStatus === 'all' 
@@ -131,7 +175,7 @@ const AdminOrdersPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="flex items-center justify-center py-20">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-10 w-10 border-2 border-purple-500 border-t-transparent"></div>
           <p className="text-gray-400 text-sm">Loading orders...</p>
@@ -150,56 +194,7 @@ const AdminOrdersPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-950">
-      <nav className="bg-gray-900/80 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/admin/dashboard" className="flex items-center space-x-3">
-              <div className="w-9 h-9 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
-                <span className="text-white font-bold text-lg">E</span>
-              </div>
-              <span className="text-white font-bold text-lg hidden sm:block">Admin Panel</span>
-            </Link>
-            
-            <div className="hidden md:flex items-center space-x-3">
-              <div className="flex items-center space-x-2 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
-                <div className="w-7 h-7 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-xs">{user.name?.charAt(0).toUpperCase()}</span>
-                </div>
-                <span className="text-white text-sm font-medium">{user.name}</span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="flex items-center space-x-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-xl transition-all duration-200 border border-red-500/10"
-              >
-                <ArrowRightOnRectangleIcon className="h-4 w-4" />
-                <span className="text-sm font-medium">Logout</span>
-              </button>
-            </div>
-
-            <button onClick={() => setMobileNavOpen(!mobileNavOpen)} className="md:hidden p-2 text-gray-400 hover:text-white">
-              {mobileNavOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
-            </button>
-          </div>
-
-          {mobileNavOpen && (
-            <div className="md:hidden pb-4 border-t border-white/10 mt-2 pt-4">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-xs">{user.name?.charAt(0).toUpperCase()}</span>
-                </div>
-                <span className="text-white font-medium">{user.name}</span>
-              </div>
-              <button onClick={handleLogout} className="flex items-center space-x-2 px-4 py-2.5 bg-red-500/10 text-red-400 rounded-xl w-full">
-                <ArrowRightOnRectangleIcon className="h-5 w-5" />
-                <span className="font-medium">Logout</span>
-              </button>
-            </div>
-          )}
-        </div>
-      </nav>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Manage Orders</h1>
@@ -302,7 +297,7 @@ const AdminOrdersPage = () => {
                       <div className="bg-white/5 rounded-xl p-3.5 space-y-2.5">
                         {order.orderItems?.map((item, index) => (
                           <div key={index} className="flex items-center space-x-3">
-                            <img src={item.image} alt={item.name} className="w-10 h-10 rounded-lg object-cover bg-white/10 shrink-0" />
+                            <img src={getImageUrl(item.image)} alt={item.name} className="w-10 h-10 rounded-lg object-cover bg-white/10 shrink-0" />
                             <div className="flex-1 min-w-0">
                               <p className="text-white font-medium text-sm truncate">{item.name}</p>
                               <p className="text-gray-500 text-xs">Qty: {item.quantity} x ₹{item.price?.toLocaleString()}</p>
@@ -328,14 +323,131 @@ const AdminOrdersPage = () => {
                           <option value="cancelled" className="bg-gray-800">Cancelled</option>
                         </select>
                       </div>
-                      <Link
-                        to={`/orders/${order._id}`}
-                        className="flex items-center space-x-1.5 text-purple-400 hover:text-purple-300 transition-colors text-sm font-medium"
-                      >
-                        <EyeIcon className="h-4 w-4" />
-                        <span>View Details</span>
-                      </Link>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => openTrackingForm(order)}
+                          className="flex items-center space-x-1.5 text-yellow-400 hover:text-yellow-300 transition-colors text-sm font-medium"
+                        >
+                          <PencilSquareIcon className="h-4 w-4" />
+                          <span>Update Tracking</span>
+                        </button>
+                        <Link
+                          to={`/orders/${order._id}`}
+                          className="flex items-center space-x-1.5 text-purple-400 hover:text-purple-300 transition-colors text-sm font-medium"
+                        >
+                          <EyeIcon className="h-4 w-4" />
+                          <span>View Details</span>
+                        </Link>
+                      </div>
                     </div>
+
+                    {editingOrder === order._id && (
+                      <div className="mt-4 p-4 bg-white/5 rounded-xl border border-white/10 space-y-3">
+                        <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+                          <PencilSquareIcon className="h-4 w-4 text-yellow-400" />
+                          Update Tracking Details
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-xs text-gray-400 mb-1 block">Status</label>
+                            <select
+                              value={trackingForm.orderStatus}
+                              onChange={(e) => setTrackingForm({...trackingForm, orderStatus: e.target.value})}
+                              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                            >
+                              <option value="pending" className="bg-gray-800">Pending</option>
+                              <option value="processing" className="bg-gray-800">Processing</option>
+                              <option value="shipped" className="bg-gray-800">Shipped</option>
+                              <option value="delivered" className="bg-gray-800">Delivered</option>
+                              <option value="cancelled" className="bg-gray-800">Cancelled</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="text-xs text-gray-400 mb-1 block">Tracking Number</label>
+                            <input
+                              type="text"
+                              value={trackingForm.trackingNumber}
+                              onChange={(e) => setTrackingForm({...trackingForm, trackingNumber: e.target.value})}
+                              placeholder="e.g. TRK123456789"
+                              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-gray-400 mb-1 block">Current Location</label>
+                            <input
+                              type="text"
+                              value={trackingForm.currentLocation}
+                              onChange={(e) => setTrackingForm({...trackingForm, currentLocation: e.target.value})}
+                              placeholder="e.g. Mumbai Warehouse"
+                              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-gray-400 mb-1 block">Estimated Delivery</label>
+                            <input
+                              type="date"
+                              value={trackingForm.estimatedDelivery}
+                              onChange={(e) => setTrackingForm({...trackingForm, estimatedDelivery: e.target.value})}
+                              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-gray-400 mb-1 block">Delivery Partner Name</label>
+                            <input
+                              type="text"
+                              value={trackingForm.deliveryPartnerName}
+                              onChange={(e) => setTrackingForm({...trackingForm, deliveryPartnerName: e.target.value})}
+                              placeholder="e.g. Rahul Kumar"
+                              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-gray-400 mb-1 block">Delivery Partner Phone</label>
+                            <input
+                              type="text"
+                              value={trackingForm.deliveryPartnerPhone}
+                              onChange={(e) => setTrackingForm({...trackingForm, deliveryPartnerPhone: e.target.value})}
+                              placeholder="e.g. +91 9876543210"
+                              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-gray-400 mb-1 block">Vehicle Number</label>
+                            <input
+                              type="text"
+                              value={trackingForm.deliveryPartnerVehicle}
+                              onChange={(e) => setTrackingForm({...trackingForm, deliveryPartnerVehicle: e.target.value})}
+                              placeholder="e.g. MH-12-AB-1234"
+                              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-gray-400 mb-1 block">Tracking Note</label>
+                            <input
+                              type="text"
+                              value={trackingForm.trackingNote}
+                              onChange={(e) => setTrackingForm({...trackingForm, trackingNote: e.target.value})}
+                              placeholder="e.g. Package out for delivery"
+                              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-gray-600"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex gap-2 pt-2">
+                          <button
+                            onClick={() => handleUpdateOrderStatus(order._id)}
+                            className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg text-sm font-medium transition-colors"
+                          >
+                            Save Changes
+                          </button>
+                          <button
+                            onClick={() => setEditingOrder(null)}
+                            className="px-4 py-2 bg-white/10 hover:bg-white/20 text-gray-300 rounded-lg text-sm font-medium transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -350,7 +462,6 @@ const AdminOrdersPage = () => {
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 };

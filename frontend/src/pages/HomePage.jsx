@@ -22,6 +22,22 @@ import realmeLogo from '../assets/realme.png';
 import vivoLogo from '../assets/vivo.png';
 import motorolaLogo from '../assets/motorola.png';
 import oppoLogo from '../assets/oppo.png';
+import boysAvatar from '../assets/boys.jpg';
+import girlsAvatar from '../assets/girls.jpg';
+import heroMain from '../assets/hero.png';
+import heroMobile from '../assets/hero-mob.png';
+import heroLaptop from '../assets/hero-lap.png';
+import heroSmart from '../assets/hero-smart.png';
+import heroEarphones from '../assets/hero-ear.png';
+import heroWatch from '../assets/hero-watch.png';
+import heroTV from '../assets/hero-tv.png';
+import heroMonitor from '../assets/hero-mon.png';
+import heroTablet from '../assets/hero-tabs.png';
+import heroWashing from '../assets/hero-wash.png';
+import heroFridge from '../assets/hero-ref.png';
+import heroAccessories from '../assets/hero-acc.png';
+import shopApp from '../assets/shop.png';
+import getImageUrl from '../utils/getImageUrl';
 
 const API_BASE = 'http://localhost:5000/api';
 
@@ -29,26 +45,134 @@ const HERO_SLIDES = [
   {
     id: 1,
     title: "Summer Electronics Sale",
-    subtitle: "Up to 50% Off on Smartphones & Laptops",
-    image: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1400&h=700&fit=crop",
+    subtitle: "Up to 50% Off on Smartphones, Laptops & Accessories",
+    tagline: "Biggest Sale of the Year",
+    description: "Explore thousands of deals across smartphones, laptops, headphones, cameras, and more. From flagship devices to budget-friendly picks — we've got it all. Limited stock available — grab your favorites before they're gone!",
+    image: heroMain,
     cta: "Shop Now",
-    ctaLink: "/products"
+    ctaLink: "/products",
+    badge: "UP TO 50% OFF",
+    features: ["Free Shipping on $50+", "30-Day Easy Returns", "No Cost EMI Available", "Cash on Delivery"]
   },
   {
     id: 2,
-    title: "New Gaming Consoles",
-    subtitle: "Latest PS5 & Xbox Series X Available",
-    image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=1400&h=700&fit=crop",
-    cta: "Explore Games",
-    ctaLink: "/products?category=gaming"
+    title: "Latest Smartphones",
+    subtitle: "Discover the Newest Phones from Apple, Samsung & OnePlus",
+    tagline: "New Arrivals Just Dropped",
+    description: "Get your hands on the latest flagships and mid-range powerhouses. Compare specs, read reviews, and find the perfect phone that matches your lifestyle — all at the best prices online.",
+    image: heroMobile,
+    cta: "Explore Phones",
+    ctaLink: "/products?category=smartphones",
+    badge: "NEW LAUNCHES",
+    features: ["Exchange & Save More", "No Cost EMI Options", "Cash on Delivery", "1 Year Brand Warranty"]
   },
   {
     id: 3,
+    title: "Premium Laptops",
+    subtitle: "Powerful Laptops for Work, Study & Gaming",
+    tagline: "Performance Meets Portability",
+    description: "From ultrabooks for professionals to high-performance gaming rigs — find the perfect laptop for your needs. Top brands like Dell, HP, Lenovo, Apple, and ASUS at unbeatable prices with extended warranty.",
+    image: heroLaptop,
+    cta: "Shop Laptops",
+    ctaLink: "/products?category=laptops",
+    badge: "TOP BRANDS",
+    features: ["1 Year Manufacturer Warranty", "Free Laptop Bag Included", "Gaming & Workstation Options", "SSD & High RAM Configs"]
+  },
+  {
+    id: 4,
     title: "Smart Home Revolution",
-    subtitle: "Transform Your Home with Smart Devices",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&h=700&fit=crop",
+    subtitle: "Transform Your Home with Alexa & Google Compatible Devices",
+    tagline: "Automate Your Lifestyle",
+    description: "Control your lights, thermostats, cameras, and appliances with just your voice. Build a connected smart home ecosystem that makes life easier, safer, and more energy-efficient — starting from just $29.",
+    image: heroSmart,
     cta: "Discover More",
-    ctaLink: "/products?category=smart-home"
+    ctaLink: "/products?category=smart-home",
+    badge: "SMART HOME",
+    features: ["Voice Control Ready", "Energy Saving Devices", "Remote Access via App", "Easy DIY Setup"]
+  },
+  {
+    id: 5,
+    title: "Premium Audio Experience",
+    subtitle: "Studio-Quality Headphones, Earbuds & Speakers",
+    tagline: "Sound That Moves You",
+    description: "Immerse yourself in rich, crystal-clear audio with our curated range of wireless earbuds, over-ear headphones, and portable speakers. Industry-leading noise cancellation and up to 30 hours of battery life.",
+    image: heroEarphones,
+    cta: "Shop Audio",
+    ctaLink: "/products?category=headphones",
+    badge: "BEST SELLERS",
+    features: ["Active Noise Cancelling", "Up to 30hr Battery Life", "Hi-Res Audio Certified", "IPX4+ Water Resistant"]
+  },
+  {
+    id: 6,
+    title: "Smart Watches",
+    subtitle: "Track Fitness, Health & Stay Connected on Your Wrist",
+    tagline: "Your Health Companion",
+    description: "Monitor your heart rate, SpO2, sleep quality, and daily activity — all from your wrist. Stay connected with notifications, calls, and music control. Style meets functionality for every occasion.",
+    image: heroWatch,
+    cta: "Shop Watches",
+    ctaLink: "/products?category=wearables",
+    badge: "HEALTH FIRST",
+    features: ["24/7 Heart Rate Monitor", "Built-in GPS Tracking", "5ATM Water Resistant", "14-Day Battery Life"]
+  },
+  {
+    id: 7,
+    title: "Smart TVs & Home Entertainment",
+    subtitle: "4K Ultra HD, OLED & QLED TVs at Unbeatable Prices",
+    tagline: "Cinema Experience at Home",
+    description: "Upgrade your living room with stunning displays featuring Dolby Vision, Dolby Atmos, and smart OS built-in. Stream Netflix, Prime, and more directly on your TV. Sizes from 43\" to 75\" available.",
+    image: heroTV,
+    cta: "Shop TVs",
+    ctaLink: "/products?category=tvs",
+    badge: "4K ULTRA HD",
+    features: ["Dolby Vision & Atmos", "120Hz Refresh Rate", "Built-in Smart OS", "Wall Mount Included"]
+  },
+  {
+    id: 8,
+    title: "Gaming Monitors",
+    subtitle: "Ultra-Smooth Displays for Competitive & Casual Gaming",
+    tagline: "Win Every Match",
+    description: "Gain the competitive edge with blazing-fast refresh rates, ultra-low response times, and stunning HDR visuals. From 24\" esports monitors to 34\" ultrawide curved displays for immersive gaming.",
+    image: heroMonitor,
+    cta: "Shop Monitors",
+    ctaLink: "/products?category=monitors",
+    badge: "144Hz+ DISPLAY",
+    features: ["1ms Response Time", "HDR10+ Support", "Adaptive Sync Tech", "IPS & VA Panel Options"]
+  },
+  {
+    id: 9,
+    title: "Tablets & iPads",
+    subtitle: "Portable Power for Creativity, Study & Entertainment",
+    tagline: "Create Anywhere You Go",
+    description: "Whether you're sketching with a stylus, attending online classes, streaming your favorite shows, or editing photos on the go — our tablets deliver desktop-class performance in a sleek, lightweight package.",
+    image: heroTablet,
+    cta: "Shop Tablets",
+    ctaLink: "/products?category=tablets",
+    badge: "ULTRA PORTABLE",
+    features: ["Stylus & Keyboard Support", "All-Day 10hr+ Battery", "Retina & AMOLED Displays", "WiFi + Cellular Options"]
+  },
+  {
+    id: 10,
+    title: "Premium Home Appliances",
+    subtitle: "Refrigerators, ACs & More at the Best Prices Online",
+    tagline: "Smart Living Starts Here",
+    description: "Upgrade every corner of your home with energy-efficient appliances from Samsung, LG, Whirlpool, and more. Inverter technology, smart diagnostics, and whisper-quiet performance — all with free installation.",
+    image: heroFridge,
+    cta: "Shop Appliances",
+    ctaLink: "/products?category=appliances",
+    badge: "HOME ESSENTIALS",
+    features: ["Energy Star Rated", "5 Year Comprehensive Warranty", "Free Installation & Setup", "EMI from ₹999/month"]
+  },
+  {
+    id: 11,
+    title: "Washing Machines",
+    subtitle: "Fully Automatic Front & Top Load at Best Prices",
+    tagline: "Effortless Laundry Every Day",
+    description: "Find the perfect washing machine for your family — from compact 6kg models to large 9kg capacity. AI-powered wash cycles, steam cleaning, and inverter motors for whisper-quiet, energy-efficient performance.",
+    image: heroWashing,
+    cta: "Shop Now",
+    ctaLink: "/products?category=appliances",
+    badge: "FULLY AUTO",
+    features: ["AI Wash Technology", "Steam & Hot Wash", "Low Water & Energy Usage", "8kg to 10kg Capacity"]
   }
 ];
 
@@ -83,9 +207,26 @@ const FALLBACK_CATEGORIES = [
 ];
 
 const TESTIMONIALS = [
-  { name: "John Doe", rating: 5, text: "Amazing products and excellent customer service! Will definitely shop again.", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" },
-  { name: "Jane Smith", rating: 5, text: "Fast delivery and authentic products. The best electronics store online!", avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop" },
-  { name: "Mike Johnson", rating: 4, text: "Great prices and quality products. The return process is also very smooth.", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" }
+  { name: "Amit Sharma", rating: 5, text: "Amazing products and excellent customer service! Will definitely shop again.", avatar: boysAvatar },
+  { name: "Priya Singh", rating: 5, text: "Fast delivery and authentic products. The best electronics store online!", avatar: girlsAvatar },
+  { name: "Rahul Verma", rating: 4, text: "Great prices and quality products. The return process is also very smooth.", avatar: boysAvatar },
+  { name: "Sneha Patel", rating: 5, text: "I love the wide range of products. Found exactly what I was looking for!", avatar: girlsAvatar },
+  { name: "Vikram Reddy", rating: 5, text: "Outstanding customer support. They resolved my issue within minutes.", avatar: boysAvatar },
+  { name: "Ananya Nair", rating: 4, text: "Very reliable store. Products are always genuine and well-packaged.", avatar: girlsAvatar },
+  { name: "Karan Mehta", rating: 5, text: "Best deals during the sale! Saved a lot on my new laptop purchase.", avatar: boysAvatar },
+  { name: "Deepika Joshi", rating: 5, text: "Quick shipping and amazing packaging. Highly recommended for electronics.", avatar: girlsAvatar },
+  { name: "Arjun Rao", rating: 4, text: "Good quality products at competitive prices. Will keep coming back.", avatar: boysAvatar },
+  { name: "Meera Gupta", rating: 5, text: "The warranty support is fantastic. Very trustworthy online store.", avatar: girlsAvatar },
+  { name: "Suresh Kumar", rating: 5, text: "Ordered a smartphone and received it in perfect condition. Great service!", avatar: boysAvatar },
+  { name: "Pooja Desai", rating: 4, text: "Easy checkout process and multiple payment options. Very convenient.", avatar: girlsAvatar },
+  { name: "Ravi Teja", rating: 5, text: "Been shopping here for over a year. Never disappointed with the quality.", avatar: boysAvatar },
+  { name: "Kavitha Rao", rating: 5, text: "My go-to store for all electronic gadgets. Love the offers and discounts!", avatar: girlsAvatar },
+  { name: "Nikhil Bansal", rating: 4, text: "Fastest delivery I have ever experienced. Products are always top-notch.", avatar: boysAvatar },
+  { name: "Shreya Iyer", rating: 5, text: "Excellent collection of accessories. Found everything I needed in one place.", avatar: girlsAvatar },
+  { name: "Manish Tiwari", rating: 5, text: "Superb shopping experience. The website is easy to navigate and user-friendly.", avatar: boysAvatar },
+  { name: "Ritika Chopra", rating: 4, text: "Amazing return policy. No questions asked, hassle-free returns.", avatar: girlsAvatar },
+  { name: "Aditya Pandey", rating: 5, text: "Bought a gaming setup and saved 30%. Best place for gamers!", avatar: boysAvatar },
+  { name: "Nisha Agarwal", rating: 5, text: "The customer care team is very responsive. Issues are resolved quickly.", avatar: girlsAvatar }
 ];
 
 const BRANDS = [
@@ -247,7 +388,7 @@ const normalizeProduct = (p) => ({
   name: p.name,
   price: p.price,
   originalPrice: p.originalPrice || p.price,
-  image: p.images?.[0] || p.image || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
+  image: p.images?.[0]?.url || p.image || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
   images: p.images || [p.image || "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop"],
   rating: p.ratings?.average || p.rating || 0,
   discount: p.discount || (p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0),
@@ -313,6 +454,50 @@ const useDealOfTheDayTimer = () => {
   ];
 };
 
+const useScrollReveal = () => {
+  const [visibleSections, setVisibleSections] = useState(new Set());
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            setVisibleSections((prev) => new Set([...prev, entry.target.dataset.section]));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const timer = setTimeout(() => {
+      document.querySelectorAll('[data-section]').forEach((el) => observer.observe(el));
+    }, 100);
+
+    return () => { clearTimeout(timer); observer.disconnect(); };
+  }, []);
+
+  return visibleSections;
+};
+
+const useAnimatedCounter = (end, duration = 2000, startCounting = false) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!startCounting) return;
+    let startTime = null;
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      setCount(Math.floor(progress * end));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [startCounting, end, duration]);
+
+  return count;
+};
+
 const SkeletonCard = () => (
   <div className="bg-white rounded-3xl shadow-lg overflow-hidden animate-pulse border border-gray-100">
     <div className="h-56 bg-gray-200" />
@@ -332,11 +517,33 @@ const SkeletonCategoryCard = () => (
   </div>
 );
 
+const StatCounter = ({ stat, startCounting, idx }) => {
+  const count = useAnimatedCounter(stat.isDecimal ? 48 : stat.value, 2000, startCounting);
+  const displayValue = stat.isDecimal ? (count / 10).toFixed(1) : count.toLocaleString();
+
+  return (
+    <div
+      className="text-center group"
+      style={{ animationDelay: `${idx * 150}ms` }}
+    >
+      <div className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg group-hover:shadow-xl`}>
+        <stat.icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
+      </div>
+      <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-2 tabular-nums">
+        {displayValue}{stat.suffix}
+      </div>
+      <div className="text-gray-500 font-medium text-sm md:text-base">{stat.label}</div>
+    </div>
+  );
+};
+
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHoveringSlide, setIsHoveringSlide] = useState(false);
   const [email, setEmail] = useState('');
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const { addToCart, isInCart } = useCart();
+  const visibleSections = useScrollReveal();
 
   const [featured, setFeatured] = useState([]);
   const [latest, setLatest] = useState([]);
@@ -346,6 +553,12 @@ const HomePage = () => {
 
   const timeLeft = useFlashSaleTimer();
   const dealTimeLeft = useDealOfTheDayTimer();
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 500);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (isHoveringSlide) return;
@@ -452,7 +665,7 @@ const HomePage = () => {
       <div className="relative">
         <div className="aspect-square overflow-hidden">
           <img
-            src={product.image}
+            src={getImageUrl(product.image)}
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             loading="lazy"
@@ -531,77 +744,147 @@ const HomePage = () => {
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute top-40 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
         <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-green-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '3s' }} />
+      </div>
+
+      {/* Marquee Announcement Bar */}
+      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-2 overflow-hidden relative">
+        <div className="animate-marquee whitespace-nowrap flex items-center gap-8 text-sm font-medium">
+          {Array(3).fill(null).map((_, i) => (
+            <React.Fragment key={i}>
+              <span className="inline-flex items-center gap-2"><Zap className="w-3.5 h-3.5 text-yellow-300" /> FREE SHIPPING on orders over $50</span>
+              <span className="inline-flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-yellow-300" /> Flash Sale — Up to 70% OFF!</span>
+              <span className="inline-flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-yellow-300" /> 100% Genuine Products</span>
+              <span className="inline-flex items-center gap-2"><Headphones className="w-3.5 h-3.5 text-yellow-300" /> 24/7 Customer Support</span>
+              <span className="inline-flex items-center gap-2"><Gift className="w-3.5 h-3.5 text-yellow-300" /> Refer & Earn $20</span>
+            </React.Fragment>
+          ))}
+        </div>
       </div>
 
       {/* ==================== 1. HERO ==================== */}
       <section
-        className="relative h-[70vh] sm:h-[80vh] md:h-[85vh] lg:h-[90vh] overflow-hidden"
+        className="relative h-[75vh] sm:h-[82vh] md:h-[88vh] lg:h-[92vh] overflow-hidden"
         onMouseEnter={() => setIsHoveringSlide(true)}
         onMouseLeave={() => setIsHoveringSlide(false)}
       >
         {HERO_SLIDES.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+            className={`absolute inset-0 transition-opacity duration-[1200ms] ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30 z-10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20 z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 z-10" />
             <img
               src={slide.image}
               alt={slide.title}
-              className="w-full h-full object-cover transition-transform duration-[8000ms] ease-out"
-              style={{ transform: index === currentSlide ? 'scale(1.05)' : 'scale(1)' }}
+              className="w-full h-full object-cover transition-transform duration-[10000ms] ease-out"
+              style={{ transform: index === currentSlide ? 'scale(1.08)' : 'scale(1)' }}
             />
             <div className="absolute inset-0 z-20 flex items-center">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                <div className={`max-w-3xl text-center mx-auto transition-all duration-700 ${index === currentSlide ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-8'}`}>
-                  <div className="inline-flex items-center justify-center gap-2 bg-white/20 backdrop-blur-xl px-4 py-2 rounded-full mb-4 md:mb-6 border border-white/30">
+                <div className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${index === currentSlide ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-12'}`}>
+
+                  {/* Badge */}
+                  <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-xl px-5 py-2.5 rounded-full mb-5 md:mb-6 border border-white/25 shadow-lg">
+                    <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-3 py-1 rounded-full text-[10px] md:text-xs font-black tracking-wider">{slide.badge}</span>
                     <Zap className="w-4 h-4 md:w-5 md:h-5 text-yellow-400 animate-pulse" />
-                    <span className="text-white font-medium text-sm md:text-base">Limited Time Offer</span>
+                    <span className="text-white/90 font-medium text-xs md:text-sm">{slide.tagline}</span>
                   </div>
-                  <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6 leading-tight">
-                    {slide.title.split(' ').map((word, i) => (
-                      <span key={i} className={`${i === slide.title.split(' ').length - 1 ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400' : ''}`}>{word} </span>
-                    ))}
+
+                  {/* Title */}
+                  <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-3 md:mb-5 leading-[1.1] tracking-tight">
+                    {slide.title.split(' ').map((word, i) => {
+                      const isLast = i === slide.title.split(' ').length - 1;
+                      const isSecond = i === 1;
+                      return (
+                        <span key={i} className={
+                          isLast ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400' :
+                          isSecond ? 'text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400' : ''
+                        }>{word} </span>
+                      );
+                    })}
                   </h1>
-                  <p className="text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 md:mb-8 font-light">{slide.subtitle}</p>
+
+                  {/* Subtitle */}
+                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 mb-2 md:mb-3 font-light leading-relaxed">{slide.subtitle}</p>
+
+                  {/* Description */}
+                  <p className="text-sm md:text-base text-gray-400 mb-5 md:mb-7 max-w-2xl mx-auto leading-relaxed hidden sm:block">{slide.description}</p>
+
+                  {/* Feature Pills */}
+                  <div className="flex flex-wrap justify-center gap-2 mb-6 md:mb-8">
+                    {slide.features.map((feat, i) => (
+                      <span key={i} className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/15 text-white/90 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-medium">
+                        <CheckCircle className="w-3 h-3 text-green-400" />
+                        {feat}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* CTA Buttons */}
                   <div className="flex flex-wrap justify-center gap-3 md:gap-4">
                     <Link
                       to={slide.ctaLink}
-                      className="inline-flex items-center gap-2 md:gap-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white px-6 py-3 md:px-8 md:py-4 rounded-2xl text-base md:text-lg font-bold hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-2xl"
+                      className="group inline-flex items-center gap-2 md:gap-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white px-7 py-3.5 md:px-9 md:py-4 rounded-2xl text-sm md:text-lg font-bold hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-blue-500/25"
                     >
                       {slide.cta}
-                      <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
+                      <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                     </Link>
-                    <button className="inline-flex items-center gap-2 md:gap-3 bg-white/10 backdrop-blur-xl border border-white/30 text-white px-6 py-3 md:px-8 md:py-4 rounded-2xl text-base md:text-lg font-semibold hover:bg-white/20 transition-all duration-300">
+                    <button className="inline-flex items-center gap-2 md:gap-3 bg-white/10 backdrop-blur-xl border border-white/30 text-white px-7 py-3.5 md:px-9 md:py-4 rounded-2xl text-sm md:text-lg font-semibold hover:bg-white/20 transition-all duration-300 hover:border-white/50">
+                      <span className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                        <span className="w-0 h-0 border-l-[7px] border-l-white border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent ml-0.5" />
+                      </span>
                       Watch Video
                     </button>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         ))}
 
-        <button onClick={prevSlide} className="absolute left-3 md:left-8 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-xl hover:bg-white/30 p-2.5 md:p-4 rounded-full transition-all duration-300 z-30 group">
-          <ChevronLeft className="w-5 h-5 md:w-8 md:h-8 text-white group-hover:scale-110 transition-transform" />
+        {/* Navigation Arrows */}
+        <button onClick={prevSlide} className="absolute left-3 md:left-8 top-1/2 -translate-y-1/2 bg-white/15 backdrop-blur-xl hover:bg-white/30 p-2.5 md:p-4 rounded-full transition-all duration-300 z-30 group border border-white/20 hover:border-white/40">
+          <ChevronLeft className="w-5 h-5 md:w-7 md:h-7 text-white group-hover:scale-110 transition-transform" />
         </button>
-        <button onClick={nextSlide} className="absolute right-3 md:right-8 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-xl hover:bg-white/30 p-2.5 md:p-4 rounded-full transition-all duration-300 z-30 group">
-          <ChevronRight className="w-5 h-5 md:w-8 md:h-8 text-white group-hover:scale-110 transition-transform" />
+        <button onClick={nextSlide} className="absolute right-3 md:right-8 top-1/2 -translate-y-1/2 bg-white/15 backdrop-blur-xl hover:bg-white/30 p-2.5 md:p-4 rounded-full transition-all duration-300 z-30 group border border-white/20 hover:border-white/40">
+          <ChevronRight className="w-5 h-5 md:w-7 md:h-7 text-white group-hover:scale-110 transition-transform" />
         </button>
 
-        <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex gap-2 md:gap-3 z-30">
-          {HERO_SLIDES.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`h-2 rounded-full transition-all duration-500 ${index === currentSlide ? 'bg-white w-10 md:w-16' : 'bg-white/40 hover:bg-white/60 w-6 md:w-8'}`}
-            />
-          ))}
+        {/* Bottom Dots + Counter + Scroll Indicator */}
+        <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 md:gap-3 z-30">
+          {/* Slide Counter */}
+          <div className="bg-white/10 backdrop-blur-xl rounded-full border border-white/20 px-4 py-1.5 flex items-center gap-3">
+            <span className="text-white font-black text-sm md:text-base">{String(currentSlide + 1).padStart(2, '0')}</span>
+            <div className="w-16 md:w-24 h-1 bg-white/20 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-blue-400 to-purple-400 rounded-full transition-all duration-700" style={{ width: `${((currentSlide + 1) / HERO_SLIDES.length) * 100}%` }} />
+            </div>
+            <span className="text-white/50 text-xs md:text-sm">{String(HERO_SLIDES.length).padStart(2, '0')}</span>
+          </div>
+          {/* Dots */}
+          <div className="flex gap-1.5 md:gap-2">
+            {HERO_SLIDES.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`rounded-full transition-all duration-500 ${
+                  index === currentSlide
+                    ? 'bg-white w-6 md:w-10 h-2 md:h-2.5 shadow-lg shadow-white/30'
+                    : 'bg-white/30 hover:bg-white/50 w-2 md:w-2.5 h-2 md:h-2.5'
+                }`}
+              />
+            ))}
+          </div>
+          <div className="animate-bounce mt-0.5">
+            <ChevronLeft className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/40 rotate-[-90deg]" />
+          </div>
         </div>
       </section>
 
       {/* ==================== 2. FEATURED PRODUCTS ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-purple-50/30 relative">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-rose-50/60 via-amber-50/40 to-violet-50/50 relative" data-section="featured">
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
@@ -623,7 +906,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 3. BRAND SHOWCASE ==================== */}
-      <section className="py-10 md:py-16 bg-white relative overflow-hidden">
+      <section className="py-10 md:py-16 bg-gradient-to-b from-slate-50/80 to-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="from-purple-100 to-pink-100"
@@ -678,7 +961,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 4. CATEGORIES ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#0c1222] via-[#131b33] to-[#0f172a] text-white relative overflow-hidden" data-section="categories">
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl" />
@@ -717,7 +1000,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 5. LATEST ARRIVALS ==================== */}
-      <section className="py-16 md:py-24 bg-white relative">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-cyan-50/50 via-white to-emerald-50/40 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="from-green-100 to-emerald-100"
@@ -738,7 +1021,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 6. BUNDLE DEALS ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-orange-50/50 via-rose-50/30 to-amber-50/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="from-red-100 to-orange-100"
@@ -793,7 +1076,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 7. FLASH SALE ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-red-600 via-orange-500 to-yellow-500 text-white relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-rose-600 via-orange-500 to-amber-500 text-white relative overflow-hidden" data-section="flashsale">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-20" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12 md:mb-14">
@@ -827,7 +1110,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 8. TRENDING ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-orange-50/30">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-amber-50/40 via-orange-50/30 to-rose-50/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="from-orange-100 to-red-100"
@@ -848,7 +1131,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 9. DEAL OF THE DAY ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900 text-white relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#1a1147] via-[#2d1b69] to-[#1e1152] text-white relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl" />
@@ -876,7 +1159,7 @@ const HomePage = () => {
               <div key={product.id} className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-yellow-400/50 hover:bg-white/15 transition-all duration-300 transform hover:-translate-y-1 group">
                 <div className="relative overflow-hidden">
                   <img
-                    src={product.image}
+                    src={getImageUrl(product.image)}
                     alt={product.name}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
@@ -915,7 +1198,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 10. TOP PICKS COMPARISON ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-indigo-50/30">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-indigo-50/40 via-blue-50/30 to-sky-50/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="from-indigo-100 to-blue-100"
@@ -938,7 +1221,7 @@ const HomePage = () => {
                 <div className="p-6">
                   <div className="flex justify-center mb-6">
                     <img
-                      src={product.image}
+                      src={getImageUrl(product.image)}
                       alt={product.name}
                       className="w-32 h-32 object-cover rounded-2xl"
                       loading="lazy"
@@ -977,7 +1260,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 11. MEGA DISCOUNT ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 text-white relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#0a0f24] via-[#1a1450] to-[#0d1333] text-white relative overflow-hidden" data-section="megadiscount">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
@@ -1008,7 +1291,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 12. GIFT CARDS ==================== */}
-      <section className="py-16 md:py-24 bg-white relative">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-emerald-50/50 via-teal-50/30 to-cyan-50/40 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="from-teal-100 to-green-100"
@@ -1045,7 +1328,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 13. WARRANTY & PROTECTION ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-purple-50/20">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-violet-50/40 via-fuchsia-50/20 to-pink-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="from-blue-100 to-cyan-100"
@@ -1097,7 +1380,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 14. FEATURES ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 text-white relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-gradient-to-r from-[#1e40af] via-[#6d28d9] to-[#1e40af] text-white relative overflow-hidden" data-section="features">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
@@ -1119,29 +1402,23 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 15. CUSTOMER STATS ==================== */}
-      <section className="py-16 md:py-24 bg-white relative">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-slate-50/80 via-blue-50/40 to-indigo-50/30 relative" data-section="stats">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             {[
-              { icon: Package, value: "50,000+", label: "Products", color: "from-blue-500 to-blue-600" },
-              { icon: Users, value: "100,000+", label: "Happy Customers", color: "from-purple-500 to-purple-600" },
-              { icon: Star, value: "4.8", label: "Average Rating", color: "from-yellow-500 to-orange-500" },
-              { icon: Award, value: "10+", label: "Years Experience", color: "from-green-500 to-emerald-500" }
+              { icon: Package, value: 50000, suffix: "+", label: "Products", color: "from-blue-500 to-blue-600" },
+              { icon: Users, value: 100000, suffix: "+", label: "Happy Customers", color: "from-purple-500 to-purple-600" },
+              { icon: Star, value: 4.8, suffix: "", label: "Average Rating", color: "from-yellow-500 to-orange-500", isDecimal: true },
+              { icon: Award, value: 10, suffix: "+", label: "Years Experience", color: "from-green-500 to-emerald-500" }
             ].map((stat, idx) => (
-              <div key={idx} className="text-center group">
-                <div className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                  <stat.icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
-                </div>
-                <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-2">{stat.value}</div>
-                <div className="text-gray-500 font-medium text-sm md:text-base">{stat.label}</div>
-              </div>
+              <StatCounter key={idx} stat={stat} startCounting={visibleSections.has('stats')} idx={idx} />
             ))}
           </div>
         </div>
       </section>
 
       {/* ==================== 16. WHY CHOOSE US ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-blue-50/30">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50/40 via-indigo-50/30 to-violet-50/40" data-section="whychoose">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="from-yellow-100 to-amber-100"
@@ -1173,7 +1450,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 17. TESTIMONIALS ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-white via-purple-50 to-white">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-purple-50/50 via-fuchsia-50/30 to-pink-50/40 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 md:mb-14">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-purple-100 px-5 py-2.5 rounded-full mb-6">
@@ -1186,13 +1463,18 @@ const HomePage = () => {
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">Real reviews from real customers who love shopping with us</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {TESTIMONIALS.map((testimonial, index) => (
-              <div key={index} className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 md:p-8 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
+        </div>
+        <div className="relative">
+          <div
+            className="flex gap-6 md:gap-8 animate-testimonial-scroll"
+            style={{ width: 'max-content' }}
+          >
+            {[...TESTIMONIALS, ...TESTIMONIALS].map((testimonial, index) => (
+              <div key={index} className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 md:p-8 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 flex-shrink-0 w-[300px] md:w-[380px]">
                 <div className="flex items-center mb-4 md:mb-6">
-                  <img src={testimonial.avatar} alt={testimonial.name} className="w-14 h-14 md:w-16 md:h-16 rounded-full mr-4 ring-4 ring-blue-100" />
+                  <img src={testimonial.avatar} alt={testimonial.name} className="w-14 h-14 md:w-16 md:h-16 rounded-full mr-4 ring-4 ring-blue-100 object-cover" />
                   <div>
-                    <h4 className="font-bold text-lg md:text-xl text-gray-900">{testimonial.name}</h4>
+                    <h4 className="font-bold text-base md:text-lg text-gray-900">{testimonial.name}</h4>
                     <div className="flex items-center gap-1 mt-1">
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -1200,15 +1482,34 @@ const HomePage = () => {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic text-base md:text-lg leading-relaxed">"{testimonial.text}"</p>
+                <p className="text-gray-600 italic text-sm md:text-base leading-relaxed">"{testimonial.text}"</p>
               </div>
             ))}
           </div>
+          <div className="absolute inset-y-0 left-0 w-20 md:w-40 bg-gradient-to-r from-purple-50 to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-y-0 right-0 w-20 md:w-40 bg-gradient-to-l from-purple-50 to-transparent pointer-events-none z-10" />
         </div>
+        <style>{`
+          @keyframes testimonialScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-testimonial-scroll {
+            animation: testimonialScroll 40s linear infinite;
+          }
+          .animate-testimonial-scroll:hover {
+            animation-play-state: paused;
+          }
+          @media (max-width: 640px) {
+            .animate-testimonial-scroll {
+              animation-duration: 25s;
+            }
+          }
+        `}</style>
       </section>
 
       {/* ==================== 18. TECH BLOG ==================== */}
-      <section className="py-16 md:py-24 bg-white relative">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-sky-50/40 via-white to-cyan-50/30 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="from-indigo-100 to-violet-100"
@@ -1259,118 +1560,132 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 19. DOWNLOAD OUR APP ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white relative overflow-hidden">
+      <section className="py-20 md:py-28 text-white relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/3 left-1/4 w-72 h-72 bg-blue-500/15 rounded-full blur-3xl" />
+          <img src={shopApp} alt="Shop on the Go" className="w-full h-full object-cover" loading="lazy" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl px-4 py-2 rounded-full mb-6 border border-white/20">
-                <Smartphone className="w-5 h-5 text-purple-400" />
-                <span className="text-purple-400 font-semibold text-sm">Mobile App</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-                Shop on the{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Go</span>
-              </h2>
-              <p className="text-gray-300 text-lg mb-8 leading-relaxed">
-                Download our app for exclusive mobile-only deals, real-time order tracking, and a seamless shopping experience.
-              </p>
-              <div className="space-y-4 mb-8">
-                {[
-                  "Exclusive app-only discounts & offers",
-                  "Real-time order tracking & notifications",
-                  "One-tap reorder from purchase history",
-                  "AR try-on for compatible products"
-                ].map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                    <span className="text-gray-300">{feature}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex flex-wrap gap-4">
-                <button className="flex items-center gap-3 bg-white text-gray-900 px-6 py-3.5 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                  <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                  </svg>
-                  <div className="text-left">
-                    <div className="text-xs opacity-80">Download on the</div>
-                    <div className="text-sm font-bold -mt-0.5">App Store</div>
-                  </div>
-                </button>
-                <button className="flex items-center gap-3 bg-white text-gray-900 px-6 py-3.5 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                  <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 1.33a1 1 0 010 1.722l-2.302 1.33-2.535-2.191 2.535-2.191zM5.864 3.457l10.937 6.333-2.302 2.302-8.635-8.635z"/>
-                  </svg>
-                  <div className="text-left">
-                    <div className="text-xs opacity-80">Get it on</div>
-                    <div className="text-sm font-bold -mt-0.5">Google Play</div>
-                  </div>
-                </button>
-              </div>
-            </div>
-            <div className="hidden lg:flex justify-center">
-              <div className="relative">
-                <div className="w-72 h-[500px] bg-gradient-to-br from-gray-800 to-gray-900 rounded-[3rem] shadow-2xl border-4 border-gray-700 overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=700&fit=crop"
-                    alt="Mobile App"
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-xl animate-bounce">
-                  <span className="text-white font-bold text-lg">50%</span>
-                </div>
-              </div>
-            </div>
+
+        {/* Animated floating orbs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-10 left-[10%] w-72 h-72 bg-purple-500/20 rounded-full blur-[100px] animate-pulse" />
+          <div className="absolute bottom-10 right-[10%] w-96 h-96 bg-pink-500/15 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '2s' }} />
+        </div>
+
+        {/* Floating decorative elements */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-20 left-[8%] w-14 h-14 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl flex items-center justify-center animate-bounce" style={{ animationDuration: '3s' }}>
+            <svg className="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+          </div>
+          <div className="absolute top-32 right-[12%] w-12 h-12 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}>
+            <svg className="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+          </div>
+          <div className="absolute bottom-24 left-[15%] w-10 h-10 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg flex items-center justify-center animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '1s' }}>
+            <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" /></svg>
+          </div>
+          <div className="absolute bottom-40 right-[8%] w-16 h-16 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl flex items-center justify-center animate-bounce" style={{ animationDuration: '4.5s', animationDelay: '1.5s' }}>
+            <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
           </div>
         </div>
-      </section>
 
-      {/* ==================== 20. SOCIAL MEDIA FEED ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-pink-50/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            badge="from-pink-100 to-rose-100"
-            title="Follow Us"
-            subtitle="Stay connected and see what's trending on our social channels"
-            gradient="from-pink-600 to-rose-600"
-            icon={Camera}
-          />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-8">
-            {SOCIAL_POSTS.map((post) => (
-              <div
-                key={post.id}
-                className="group relative aspect-square rounded-2xl overflow-hidden cursor-pointer"
-              >
-                <img
-                  src={post.image}
-                  alt="Social post"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <Camera className="w-8 h-8 text-white" />
-                </div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl px-5 py-2.5 rounded-full mb-8 border border-white/20 shadow-lg shadow-purple-500/10">
+            <Smartphone className="w-5 h-5 text-purple-400" />
+            <span className="text-purple-300 font-semibold text-sm tracking-wide">Mobile App</span>
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-ping" />
+          </div>
+
+          {/* Heading */}
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-6 leading-tight">
+            Shop on the{' '}
+            <span className="relative inline-block">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400">Go</span>
+              <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 rounded-full" />
+            </span>
+          </h2>
+
+          {/* Subtitle */}
+          <p className="text-gray-300 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl mx-auto">
+            Download our app for exclusive mobile-only deals, real-time order tracking, and a seamless shopping experience.
+          </p>
+
+          {/* Stats row */}
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
+            {[
+              { number: '5M+', label: 'Downloads', icon: '📥' },
+              { number: '4.8★', label: 'App Rating', icon: '⭐' },
+              { number: '50K+', label: 'Daily Users', icon: '👥' },
+              { number: '200+', label: 'Deals Daily', icon: '🔥' },
+            ].map((stat, idx) => (
+              <div key={idx} className="flex flex-col items-center gap-1 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-6 py-4 hover:bg-white/10 transition-all duration-300 hover:scale-105 min-w-[120px]">
+                <span className="text-2xl">{stat.icon}</span>
+                <span className="text-2xl md:text-3xl font-extrabold text-white">{stat.number}</span>
+                <span className="text-gray-400 text-xs font-medium uppercase tracking-wider">{stat.label}</span>
               </div>
             ))}
           </div>
-          <div className="text-center">
-            <button className="inline-flex items-center gap-3 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white px-8 py-4 rounded-2xl font-bold hover:from-pink-600 hover:via-red-600 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 shadow-xl">
-              <Camera className="w-5 h-5" />
-              Follow @ElectroShop
+
+          {/* Feature chips */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {[
+              { text: "App-only discounts", icon: "🏷️" },
+              { text: "Real-time tracking", icon: "📍" },
+              { text: "One-tap reorder", icon: "⚡" },
+              { text: "AR try-on", icon: "📷" },
+              { text: "Secure payments", icon: "🔒" },
+              { text: "24/7 support", icon: "💬" },
+            ].map((feature, idx) => (
+              <div key={idx} className="group flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2.5 rounded-full border border-white/10 hover:bg-white/20 hover:border-white/20 transition-all duration-300 cursor-default">
+                <span className="text-base group-hover:scale-125 transition-transform duration-300">{feature.icon}</span>
+                <span className="text-gray-200 text-sm font-medium">{feature.text}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Download buttons */}
+          <div className="flex flex-wrap justify-center gap-5 mb-14">
+            <button className="group flex items-center gap-4 bg-white text-gray-900 px-8 py-4 rounded-2xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-white/10 hover:shadow-white/20">
+              <svg className="w-8 h-8 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+              <div className="text-left border-l border-gray-300 pl-4">
+                <div className="text-[11px] opacity-60 font-medium uppercase tracking-wider">Download on the</div>
+                <div className="text-base font-bold -mt-0.5">App Store</div>
+              </div>
             </button>
+            <button className="group flex items-center gap-4 bg-white text-gray-900 px-8 py-4 rounded-2xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-white/10 hover:shadow-white/20">
+              <svg className="w-8 h-8 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 1.33a1 1 0 010 1.722l-2.302 1.33-2.535-2.191 2.535-2.191zM5.864 3.457l10.937 6.333-2.302 2.302-8.635-8.635z"/>
+              </svg>
+              <div className="text-left border-l border-gray-300 pl-4">
+                <div className="text-[11px] opacity-60 font-medium uppercase tracking-wider">Get it on</div>
+                <div className="text-base font-bold -mt-0.5">Google Play</div>
+              </div>
+            </button>
+          </div>
+
+          {/* Trust badges */}
+          <div className="flex flex-wrap justify-center items-center gap-6 text-gray-400 text-sm">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+              <span>100% Secure</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              <span>Fast & Lightweight</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+              <span>No Data Usage</span>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ==================== 21. REFERRAL PROGRAM ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 text-white relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#059669] via-[#0d9488] to-[#0891b2] text-white relative overflow-hidden" data-section="referral">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-20" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
@@ -1412,7 +1727,7 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 22. QUICK LINKS BAR ==================== */}
-      <section className="py-12 md:py-16 bg-white border-y border-gray-100">
+      <section className="py-12 md:py-16 bg-gradient-to-b from-white to-slate-50/80 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
             {[
@@ -1439,13 +1754,13 @@ const HomePage = () => {
       </section>
 
       {/* ==================== 23. NEWSLETTER ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-[#1e40af] via-[#7c3aed] to-[#db2777] text-white relative overflow-hidden" data-section="newsletter">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
         </div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <Mail className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-6" />
+          <Mail className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-6 animate-bounce" />
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Stay Updated</h2>
           <p className="text-lg md:text-xl mb-8 md:mb-10 text-white/90">Subscribe to get exclusive offers and new product updates</p>
           <form
@@ -1465,7 +1780,7 @@ const HomePage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="flex-1 px-6 py-4 rounded-2xl text-gray-800 focus:outline-none focus:ring-4 focus:ring-white/30 text-base md:text-lg"
+              className="flex-1 px-6 py-4 rounded-2xl text-gray-800 focus:outline-none focus:ring-4 focus:ring-white/30 text-base md:text-lg shadow-xl"
               required
             />
             <button
@@ -1477,6 +1792,52 @@ const HomePage = () => {
           </form>
         </div>
       </section>
+
+      {/* Back to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all duration-300 animate-bounce"
+        >
+          <ChevronLeft className="w-5 h-5 rotate-90" />
+        </button>
+      )}
+
+      {/* Scroll Reveal Styles */}
+        <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.33%); }
+        }
+        .animate-marquee {
+          animation: marquee 20s linear infinite;
+        }
+        [data-section] {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        [data-section].visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(3deg); }
+        }
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .animate-shimmer {
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+          background-size: 200% 100%;
+          animation: shimmer 3s infinite;
+        }
+      `}</style>
     </div>
   );
 };

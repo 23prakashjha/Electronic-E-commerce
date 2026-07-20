@@ -14,6 +14,7 @@ import {
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import getImageUrl from '../utils/getImageUrl';
 
 const formatPrice = (price) =>
   new Intl.NumberFormat('en-IN', {
@@ -117,7 +118,7 @@ const ProductCard = ({ product, showQuickActions = true }) => {
         <Link to={`/product/${product._id}`} className="block">
           <div className="aspect-square w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
             <img
-              src={product.images?.[0]?.url || '/placeholder-product.jpg'}
+              src={getImageUrl(product.images?.[0]?.url)}
               alt={product.name}
               className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-105"
             />

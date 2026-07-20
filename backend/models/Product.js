@@ -140,9 +140,8 @@ productSchema.methods.calculateAverageRating = function() {
 };
 
 // Update average rating before saving
-productSchema.pre('save', function(next) {
+productSchema.pre('save', function() {
   this.calculateAverageRating();
-  next();
 });
 
 module.exports = mongoose.model('Product', productSchema);

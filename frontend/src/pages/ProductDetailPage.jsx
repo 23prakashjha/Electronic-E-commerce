@@ -20,6 +20,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import ProductCard from '../components/ProductCard';
 import toast from 'react-hot-toast';
+import getImageUrl from '../utils/getImageUrl';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -244,7 +245,7 @@ const ProductDetailPage = () => {
           <div className="space-y-4">
             <div className="relative bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
               <img
-                src={product.images?.[selectedImage]?.url || '/placeholder-product.jpg'}
+                src={getImageUrl(product.images?.[selectedImage]?.url)}
                 alt={product.name}
                 className="w-full aspect-square object-cover"
               />
@@ -289,7 +290,7 @@ const ProductDetailPage = () => {
                         : 'border-gray-200 hover:border-gray-400 opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={image.url} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
+                    <img src={getImageUrl(image.url)} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

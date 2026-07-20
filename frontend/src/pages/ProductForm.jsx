@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { 
-  ArrowLeftIcon,
   PhotoIcon,
   PlusIcon,
   TrashIcon,
@@ -282,7 +281,7 @@ const ProductForm = () => {
 
   if (fetchingProduct) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="flex items-center justify-center py-20">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-10 w-10 border-2 border-purple-500 border-t-transparent"></div>
           <p className="text-gray-400 text-sm">Loading product...</p>
@@ -292,28 +291,7 @@ const ProductForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950">
-      <div className="bg-gray-900/80 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link
-                to="/admin/products"
-                className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors text-sm"
-              >
-                <ArrowLeftIcon className="h-4 w-4" />
-                <span>Back</span>
-              </Link>
-              <div className="h-5 w-px bg-white/10"></div>
-              <h1 className="text-lg font-bold text-white">
-                {isEdit ? 'Edit Product' : 'Add New Product'}
-              </h1>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
             <div className="p-5 border-b border-white/10 flex items-center space-x-3">
@@ -737,7 +715,6 @@ const ProductForm = () => {
             </button>
           </div>
         </form>
-      </div>
     </div>
   );
 };

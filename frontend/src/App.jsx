@@ -12,6 +12,7 @@ import CartPage from './pages/CartPage';
 import ProfilePage from './pages/ProfilePage';
 import WishlistPage from './pages/WishlistPage';
 import OrdersPage from './pages/OrdersPage';
+import OrderTrackingPage from './pages/OrderTrackingPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import AdminDashboard from './pages/AdminDashboard';
@@ -22,10 +23,7 @@ import ProductForm from './pages/ProductForm';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
-
-const AdminLayout = ({ children }) => (
-  <>{children}</>
-);
+import AdminLayout from './components/AdminLayout';
 
 const MainLayout = ({ children }) => (
   <>
@@ -57,6 +55,7 @@ function AppContent() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/orders" element={<OrdersPage />} />
+        <Route path="/orders/:id" element={<OrderTrackingPage />} />
         <Route path="/admin/login" element={<LoginPage />} />
         <Route path="/admin/register" element={<RegisterPage />} />
         <Route path="/admin" element={<AdminDashboard />} />

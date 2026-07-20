@@ -17,6 +17,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import ProductCard from '../components/ProductCard';
 import toast from 'react-hot-toast';
+import getImageUrl from '../utils/getImageUrl';
 
 const FREE_SHIPPING_THRESHOLD = 500;
 
@@ -115,7 +116,7 @@ const CartPage = () => {
                   {/* Image */}
                   <Link to={`/product/${item.product}`} className="shrink-0">
                     <img
-                      src={item.image || '/placeholder-product.jpg'}
+                      src={getImageUrl(item.image)}
                       alt={item.name}
                       className="w-full sm:w-28 h-48 sm:h-28 object-cover rounded-xl hover:opacity-90 transition-opacity"
                     />

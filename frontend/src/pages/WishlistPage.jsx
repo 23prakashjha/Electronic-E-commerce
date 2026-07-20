@@ -14,6 +14,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import ProductCard from '../components/ProductCard';
 import toast from 'react-hot-toast';
+import getImageUrl from '../utils/getImageUrl';
 
 const WishlistPage = () => {
   const [wishlistItems, setWishlistItems] = useState([]);
@@ -204,7 +205,7 @@ const WishlistPage = () => {
                   <div className="relative">
                     <Link to={`/product/${product._id}`}>
                       <img
-                        src={product.images?.[0]?.url || '/placeholder-product.jpg'}
+                        src={getImageUrl(product.images?.[0]?.url)}
                         alt={product.name}
                         className="w-full h-56 object-cover object-center group-hover:scale-105 transition-transform duration-300"
                       />

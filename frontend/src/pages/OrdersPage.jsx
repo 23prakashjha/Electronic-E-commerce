@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ShoppingBagIcon,
   TruckIcon,
@@ -16,12 +16,14 @@ import {
   ArrowRightIcon,
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
+import getImageUrl from '../utils/getImageUrl';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchOrders();
@@ -49,6 +51,25 @@ const OrdersPage = () => {
       toast.error('Failed to load orders');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCancelOrder = async (orderId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/cancel`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await response.json();
+      if (data.success) {
+        setOrders(orders.map(o => o._id === orderId ? data.order : o));
+        toast.success('Order cancelled successfully');
+      } else {
+        toast.error(data.message || 'Failed to cancel order');
+      }
+    } catch (error) {
+      toast.error('Failed to cancel order');
     }
   };
 
@@ -251,7 +272,7 @@ const OrdersPage = () => {
                       {order.orderItems.slice(0, 4).map((item, index) => (
                         <div key={index} className="flex items-center gap-3 bg-white rounded-lg p-3 border border-gray-100">
                           <img
-                            src={item.image || '/placeholder-product.jpg'}
+                            src={getImageUrl(item.image)}
                             alt={item.name}
                             className="w-12 h-12 object-cover rounded-lg shrink-0"
                           />
@@ -298,16 +319,19 @@ const OrdersPage = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setSelectedOrder(order)}
+                      <Link
+                        to={`/orders/${order._id}`}
                         className="flex items-center gap-1.5 text-blue-600 hover:text-blue-700 font-semibold text-sm bg-blue-50 px-4 py-2 rounded-xl hover:bg-blue-100 transition-colors"
                       >
                         <EyeIcon className="h-4 w-4" />
-                        View Details
-                      </button>
+                        Track Order
+                      </Link>
 
                       {order.orderStatus === 'pending' && (
-                        <button className="text-red-500 hover:text-red-700 font-semibold text-sm px-4 py-2 rounded-xl hover:bg-red-50 transition-colors">
+                        <button
+                          onClick={() => handleCancelOrder(order._id)}
+                          className="text-red-500 hover:text-red-700 font-semibold text-sm px-4 py-2 rounded-xl hover:bg-red-50 transition-colors"
+                        >
                           Cancel
                         </button>
                       )}
@@ -427,7 +451,7 @@ const OrdersPage = () => {
                   {selectedOrder.orderItems.map((item, index) => (
                     <div key={index} className="flex items-center gap-4 bg-gray-50 rounded-xl p-4 border border-gray-100">
                       <img
-                        src={item.image || '/placeholder-product.jpg'}
+                        src={getImageUrl(item.image)}
                         alt={item.name}
                         className="w-16 h-16 object-cover rounded-xl shrink-0"
                       />

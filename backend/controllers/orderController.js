@@ -48,7 +48,13 @@ exports.createOrder = async (req, res, next) => {
       shippingAddress,
       paymentInfo,
       taxPrice,
-      shippingPrice
+      shippingPrice,
+      trackingUpdates: [{
+        status: 'pending',
+        location: shippingAddress.city + ', ' + shippingAddress.state,
+        timestamp: Date.now(),
+        note: 'Order placed successfully'
+      }]
     });
 
     const populatedOrder = await Order.findById(order._id)
@@ -175,7 +181,7 @@ exports.getOrders = async (req, res, next) => {
 // @access  Private/Admin
 exports.updateOrderStatus = async (req, res, next) => {
   try {
-    const { orderStatus, trackingNumber } = req.body;
+    const { orderStatus, trackingNumber, estimatedDelivery, currentLocation, deliveryPartner, trackingNote } = req.body;
 
     const order = await Order.findById(req.params.id);
 
@@ -192,9 +198,28 @@ exports.updateOrderStatus = async (req, res, next) => {
       order.trackingNumber = trackingNumber;
     }
 
+    if (estimatedDelivery) {
+      order.estimatedDelivery = estimatedDelivery;
+    }
+
+    if (currentLocation) {
+      order.currentLocation = currentLocation;
+    }
+
+    if (deliveryPartner) {
+      order.deliveryPartner = deliveryPartner;
+    }
+
     if (orderStatus === 'delivered') {
       order.deliveredAt = Date.now();
     }
+
+    order.trackingUpdates.push({
+      status: orderStatus,
+      location: currentLocation || order.currentLocation || '',
+      timestamp: Date.now(),
+      note: trackingNote || `Order status updated to ${orderStatus}`
+    });
 
     await order.save();
 
