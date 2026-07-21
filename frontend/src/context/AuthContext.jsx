@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 
 // Initial state
 const initialState = {
@@ -69,13 +69,11 @@ export const AuthProvider = ({ children }) => {
   // Set axios default headers and persist user
   useEffect(() => {
     if (state.token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
       localStorage.setItem('token', state.token);
       if (state.user) {
         localStorage.setItem('user', JSON.stringify(state.user));
       }
     } else {
-      delete axios.defaults.headers.common['Authorization'];
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     }
@@ -92,7 +90,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       try {
         dispatch({ type: SET_LOADING, payload: true });
-        const res = await axios.get('/api/users/me');
+        const res = await api.get('/users/me');
         dispatch({
           type: AUTH_SUCCESS,
           payload: {
@@ -115,7 +113,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       dispatch({ type: SET_LOADING, payload: true });
-      const res = await axios.post('/api/users/register', userData);
+      const res = await api.post('/users/register', userData);
       dispatch({
         type: AUTH_SUCCESS,
         payload: {
@@ -137,7 +135,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       dispatch({ type: SET_LOADING, payload: true });
-      const res = await axios.post('/api/users/login', credentials);
+      const res = await api.post('/users/login', credentials);
       dispatch({
         type: AUTH_SUCCESS,
         payload: {
@@ -168,7 +166,7 @@ export const AuthProvider = ({ children }) => {
   // Update user profile
   const updateProfile = async (userData) => {
     try {
-      const res = await axios.put('/api/users/profile', userData);
+      const res = await api.put('/users/profile', userData);
       dispatch({
         type: AUTH_SUCCESS,
         payload: {
