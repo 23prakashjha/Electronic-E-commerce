@@ -90,9 +90,9 @@ const AdminDashboard = () => {
       const headers = { 'Authorization': `Bearer ${token}` };
       
       const [productsRes, ordersRes, usersRes] = await Promise.all([
-        fetch('http://localhost:5000/api/products?limit=100', { headers }),
-        fetch('http://localhost:5000/api/orders?limit=50', { headers }),
-        fetch('http://localhost:5000/api/users', { headers })
+        fetch('https://electronic-e-commerce-8f68.onrender.com/api/products?limit=100', { headers }),
+        fetch('https://electronic-e-commerce-8f68.onrender.com/api/orders?limit=50', { headers }),
+        fetch('https://electronic-e-commerce-8f68.onrender.com/api/users', { headers })
       ]);
 
       const productsData = await productsRes.json();
@@ -118,7 +118,7 @@ const AdminDashboard = () => {
   const handleDeleteProduct = async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
+        const response = await fetch(`https://electronic-e-commerce-8f68.onrender.com/api/products/${productId}`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
@@ -136,7 +136,7 @@ const AdminDashboard = () => {
 
   const handleUpdateOrderStatus = async (orderId, status) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+      const response = await fetch(`https://electronic-e-commerce-8f68.onrender.com/api/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

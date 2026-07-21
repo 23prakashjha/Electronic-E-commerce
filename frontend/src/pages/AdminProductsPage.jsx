@@ -38,7 +38,7 @@ const AdminProductsPage = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/products?limit=100', {
+      const response = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/products?limit=100', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -57,7 +57,7 @@ const AdminProductsPage = () => {
   const handleDeleteProduct = async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
+        const response = await fetch(`https://electronic-e-commerce-8f68.onrender.com/api/products/${productId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`

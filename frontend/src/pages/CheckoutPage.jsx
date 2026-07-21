@@ -70,7 +70,7 @@ const CheckoutPage = () => {
 
   const fetchRazorpayKey = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/payment/key');
+      const res = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/payment/key');
       const data = await res.json();
       if (data.success) setRazorpayKey(data.key);
     } catch (error) {
@@ -118,7 +118,7 @@ const CheckoutPage = () => {
       image: item.image
     }));
 
-    const res = await fetch('http://localhost:5000/api/orders', {
+    const res = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/orders', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const CheckoutPage = () => {
   };
 
   const verifyPayment = async (paymentData) => {
-    const res = await fetch('http://localhost:5000/api/payment/verify', {
+    const res = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/payment/verify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ const CheckoutPage = () => {
         status: 'pending'
       });
 
-      const razorpayOrderRes = await fetch('http://localhost:5000/api/payment/create-order', {
+      const razorpayOrderRes = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/payment/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

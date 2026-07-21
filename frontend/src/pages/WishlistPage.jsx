@@ -30,7 +30,7 @@ const WishlistPage = () => {
 
   const fetchWishlist = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users/wishlist', {
+      const response = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/users/wishlist', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -49,7 +49,7 @@ const WishlistPage = () => {
 
   const removeFromWishlist = async (productId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/users/wishlist/${productId}`, {
+      const response = await fetch(`https://electronic-e-commerce-8f68.onrender.com/api/users/wishlist/${productId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -82,7 +82,7 @@ const WishlistPage = () => {
     if (window.confirm('Are you sure you want to clear your wishlist?')) {
       try {
         const promises = wishlistItems.map((item) =>
-          fetch(`http://localhost:5000/api/users/wishlist/${item._id}`, {
+          fetch(`https://electronic-e-commerce-8f68.onrender.com/api/users/wishlist/${item._id}`, {
             method: 'DELETE',
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,

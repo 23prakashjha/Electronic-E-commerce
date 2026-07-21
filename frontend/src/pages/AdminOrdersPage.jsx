@@ -50,7 +50,7 @@ const AdminOrdersPage = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders?limit=100', {
+      const response = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/orders?limit=100', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -68,7 +68,7 @@ const AdminOrdersPage = () => {
 
   const handleUpdateOrderStatus = async (orderId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+      const response = await fetch(`https://electronic-e-commerce-8f68.onrender.com/api/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

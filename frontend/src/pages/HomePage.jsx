@@ -35,7 +35,7 @@ import heroFridge from '../assets/hero-ref.png';
 import heroAccessories from '../assets/hero-acc.png';
 import getImageUrl from '../utils/getImageUrl';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://electronic-e-commerce-8f68.onrender.com/api';
 
 const HERO_SLIDES = [
   {

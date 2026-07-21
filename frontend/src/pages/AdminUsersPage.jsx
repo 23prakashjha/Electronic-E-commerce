@@ -31,7 +31,7 @@ const AdminUsersPage = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/users', {
+      const response = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/users', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -49,7 +49,7 @@ const AdminUsersPage = () => {
     if (!window.confirm(`Are you sure you want to delete "${userName}"?`)) return;
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/users/${userId}`, {
+      const response = await fetch(`https://electronic-e-commerce-8f68.onrender.com/api/users/${userId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -74,7 +74,7 @@ const AdminUsersPage = () => {
     setAddLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/users', {
+      const response = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(addForm)

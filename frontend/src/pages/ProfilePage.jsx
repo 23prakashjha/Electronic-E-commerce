@@ -44,7 +44,7 @@ const ProfilePage = () => {
 
   const fetchAddresses = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users/address', {
+      const response = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/users/address', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -60,7 +60,7 @@ const ProfilePage = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders/my-orders', {
+      const response = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/orders/my-orders', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

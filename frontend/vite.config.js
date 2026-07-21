@@ -10,11 +10,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://electronic-e-commerce-8f68.onrender.com',
         changeOrigin: true
       },
       '/uploads': {
-        target: 'http://localhost:5000',
+        target: 'https://electronic-e-commerce-8f68.onrender.com',
         changeOrigin: true
       }
     }

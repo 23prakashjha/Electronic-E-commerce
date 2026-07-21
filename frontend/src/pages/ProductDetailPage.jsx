@@ -59,7 +59,7 @@ const ProductDetailPage = () => {
   const fetchProduct = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/products/${id}`);
+      const response = await fetch(`https://electronic-e-commerce-8f68.onrender.com/api/products/${id}`);
       const data = await response.json();
       if (data.success) {
         setProduct(data.product);
@@ -95,14 +95,14 @@ const ProductDetailPage = () => {
     }
     try {
       if (isWishlisted) {
-        await fetch(`http://localhost:5000/api/users/wishlist/${product._id}`, {
+        await fetch(`https://electronic-e-commerce-8f68.onrender.com/api/users/wishlist/${product._id}`, {
           method: 'DELETE',
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setIsWishlisted(false);
         toast.success('Removed from wishlist');
       } else {
-        await fetch('http://localhost:5000/api/users/wishlist', {
+        await fetch('https://electronic-e-commerce-8f68.onrender.com/api/users/wishlist', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ const ProductDetailPage = () => {
     }
     try {
       setReviewSubmitting(true);
-      const response = await fetch(`http://localhost:5000/api/products/${id}/reviews`, {
+      const response = await fetch(`https://electronic-e-commerce-8f68.onrender.com/api/products/${id}/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000';
+const API_BASE = 'https://electronic-e-commerce-8f68.onrender.com';
 
 const getImageUrl = (url, fallback = '/placeholder-product.jpg') => {
   if (!url) return fallback;

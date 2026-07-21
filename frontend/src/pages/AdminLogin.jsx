@@ -25,7 +25,7 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/users/login', {
+      const response = await fetch('https://electronic-e-commerce-8f68.onrender.com/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

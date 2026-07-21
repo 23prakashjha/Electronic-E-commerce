@@ -12,7 +12,7 @@ import {
 import { StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 
-const API_BASE = 'http://localhost:5000';
+const API_BASE = 'https://electronic-e-commerce-8f68.onrender.com';
 
 const ProductForm = () => {
   const { id } = useParams();

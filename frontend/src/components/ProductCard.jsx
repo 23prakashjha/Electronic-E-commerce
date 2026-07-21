@@ -53,7 +53,7 @@ const ProductCard = ({ product, showQuickActions = true }) => {
 
     try {
       if (isWishlisted) {
-        await fetch(`http://localhost:5000/api/users/wishlist/${product._id}`, {
+        await fetch(`https://electronic-e-commerce-8f68.onrender.com/api/users/wishlist/${product._id}`, {
           method: 'DELETE',
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -62,7 +62,7 @@ const ProductCard = ({ product, showQuickActions = true }) => {
         setIsWishlisted(false);
         toast.success('Removed from wishlist');
       } else {
-        await fetch('http://localhost:5000/api/users/wishlist', {
+        await fetch('https://electronic-e-commerce-8f68.onrender.com/api/users/wishlist', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

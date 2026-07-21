@@ -19,7 +19,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import getImageUrl from '../utils/getImageUrl';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://electronic-e-commerce-8f68.onrender.com/api';
 
 const STATUS_STEPS = [
   { key: 'pending', label: 'Order Placed', icon: ClockIcon, description: 'Your order has been confirmed' },
