@@ -136,6 +136,16 @@ exports.createProduct = async (req, res, next) => {
   try {
     const product = await Product.create(req.body);
 
+    // Admin can override ratings — set after creation (bypasses pre-save recalculation)
+    if (req.body.ratings) {
+      await Product.findByIdAndUpdate(product._id, {
+        $set: {
+          'ratings.average': req.body.ratings.average || 0,
+          'ratings.count': req.body.ratings.count || 0
+        }
+      });
+    }
+
     // Update category product count
     await Category.findByIdAndUpdate(
       product.category,

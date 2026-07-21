@@ -9,8 +9,10 @@ import {
   MagnifyingGlassIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  XMarkIcon
+  XMarkIcon,
+  StarIcon
 } from '@heroicons/react/24/outline';
+import { StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import getImageUrl from '../utils/getImageUrl';
@@ -139,6 +141,7 @@ const AdminProductsPage = () => {
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Brand</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Price</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Stock</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Rating</th>
                   <th className="px-5 py-3 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
@@ -185,6 +188,20 @@ const AdminProductsPage = () => {
                           {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                         </span>
                       </td>
+                      <td className="px-5 py-3">
+                        <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-0.5">
+                            {[1, 2, 3, 4, 5].map((s) => (
+                              <StarSolidIcon
+                                key={s}
+                                className={`h-3.5 w-3.5 ${s <= Math.round(product.ratings?.average || 0) ? 'text-yellow-400' : 'text-gray-700'}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-gray-300 text-sm font-medium">{(product.ratings?.average || 0).toFixed(1)}</span>
+                          <span className="text-gray-600 text-xs">({product.ratings?.count || 0})</span>
+                        </div>
+                      </td>
                       <td className="px-5 py-3 text-right">
                         <div className="flex items-center justify-end space-x-1.5">
                           <Link to={`/admin/products/${product._id}`} className="p-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-lg transition-colors" title="Edit">
@@ -202,7 +219,7 @@ const AdminProductsPage = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="px-5 py-12 text-center">
+                    <td colSpan="7" className="px-5 py-12 text-center">
                       <CubeIcon className="h-12 w-12 text-gray-700 mx-auto mb-3" />
                       <p className="text-gray-400 text-sm mb-3">No products found</p>
                       <Link to="/admin/products/new" className="inline-flex items-center space-x-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold">
@@ -232,6 +249,17 @@ const AdminProductsPage = () => {
                         }`}>
                           {product.stock > 0 ? `${product.stock}` : 'OOS'}
                         </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <div className="flex items-center gap-0.5">
+                          {[1, 2, 3, 4, 5].map((s) => (
+                            <StarSolidIcon
+                              key={s}
+                              className={`h-3 w-3 ${s <= Math.round(product.ratings?.average || 0) ? 'text-yellow-400' : 'text-gray-700'}`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-gray-400 text-xs">{(product.ratings?.average || 0).toFixed(1)} ({product.ratings?.count || 0})</span>
                       </div>
                       <div className="flex items-center space-x-2 mt-2">
                         <Link to={`/admin/products/${product._id}`} className="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg" title="Edit">

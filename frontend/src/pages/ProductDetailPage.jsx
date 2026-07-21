@@ -32,6 +32,10 @@ const ProductDetailPage = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState('description');
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState('');
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [hoveredStar, setHoveredStar] = useState(0);
   const ctaRef = useRef(null);
   const thumbContainerRef = useRef(null);
   const { addToCart, isInCart } = useCart();
@@ -124,6 +128,56 @@ const ProductDetailPage = () => {
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast.success('Link copied to clipboard!');
+    }
+  };
+
+  const userHasReviewed = () => {
+    if (!isAuthenticated || !product?.reviews) return false;
+    try {
+      const userId = JSON.parse(atob(localStorage.getItem('token')?.split('.')[1]))?.id;
+      return product.reviews.some((r) => r.user === userId || r.user?._id === userId);
+    } catch {
+      return false;
+    }
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (!isAuthenticated) {
+      toast.error('Please login to submit a review');
+      return;
+    }
+    if (reviewRating === 0) {
+      toast.error('Please select a rating');
+      return;
+    }
+    if (!reviewComment.trim()) {
+      toast.error('Please write a comment');
+      return;
+    }
+    try {
+      setReviewSubmitting(true);
+      const response = await fetch(`http://localhost:5000/api/products/${id}/reviews`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ rating: reviewRating, comment: reviewComment.trim() }),
+      });
+      const data = await response.json();
+      if (response.ok && data.success) {
+        toast.success('Review submitted successfully!');
+        setReviewRating(0);
+        setReviewComment('');
+        fetchProduct();
+      } else {
+        toast.error(data.message || 'Failed to submit review');
+      }
+    } catch {
+      toast.error('Failed to submit review');
+    } finally {
+      setReviewSubmitting(false);
     }
   };
 
@@ -495,47 +549,136 @@ const ProductDetailPage = () => {
           )}
 
           {activeTab === 'reviews' && (
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Customer Reviews</h3>
-              {product.reviews?.length > 0 ? (
-                <div className="space-y-5">
-                  {product.reviews.map((review) => (
-                    <div key={review._id} className="border border-gray-100 rounded-xl p-5">
-                      <div className="flex items-start justify-between gap-4 mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0">
-                            <span className="text-white text-sm font-bold">{getInitials(review.name)}</span>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-sm text-gray-900">{review.name}</h4>
-                            <div className="flex items-center gap-0.5 mt-0.5">
-                              {[...Array(5)].map((_, i) => (
-                                <StarSolidIcon
-                                  key={i}
-                                  className={`h-3.5 w-3.5 ${i < review.rating ? 'text-yellow-400' : 'text-gray-200'}`}
-                                />
-                              ))}
+            <div className="space-y-6">
+              {/* Write a Review */}
+              <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Write a Review</h3>
+                <p className="text-sm text-gray-500 mb-6">Share your experience with this product</p>
+
+                {!isAuthenticated ? (
+                  <div className="text-center py-8 bg-gray-50 rounded-xl">
+                    <p className="text-gray-600 mb-4">Please login to write a review</p>
+                    <Link
+                      to="/login"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors"
+                    >
+                      Login
+                    </Link>
+                  </div>
+                ) : userHasReviewed() ? (
+                  <div className="text-center py-8 bg-gray-50 rounded-xl">
+                    <p className="text-gray-600">You have already reviewed this product.</p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmitReview} className="space-y-5">
+                    {/* Star Rating Selector */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Your Rating</label>
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            type="button"
+                            onClick={() => setReviewRating(star)}
+                            onMouseEnter={() => setHoveredStar(star)}
+                            onMouseLeave={() => setHoveredStar(0)}
+                            className="p-0.5 transition-transform hover:scale-110"
+                          >
+                            <StarSolidIcon
+                              className={`h-8 w-8 transition-colors ${
+                                star <= (hoveredStar || reviewRating)
+                                  ? 'text-yellow-400'
+                                  : 'text-gray-200'
+                              }`}
+                            />
+                          </button>
+                        ))}
+                        {reviewRating > 0 && (
+                          <span className="ml-2 text-sm text-gray-500">
+                            {['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'][reviewRating]}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Comment */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Your Review</label>
+                      <textarea
+                        value={reviewComment}
+                        onChange={(e) => setReviewComment(e.target.value)}
+                        placeholder="What did you like or dislike about this product?"
+                        rows={4}
+                        maxLength={500}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 resize-none transition-colors"
+                      />
+                      <p className="text-xs text-gray-400 mt-1 text-right">{reviewComment.length}/500</p>
+                    </div>
+
+                    {/* Submit */}
+                    <button
+                      type="submit"
+                      disabled={reviewSubmitting || reviewRating === 0 || !reviewComment.trim()}
+                      className="px-6 py-3 bg-gray-900 text-white rounded-xl text-sm font-semibold hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+                    >
+                      {reviewSubmitting ? (
+                        <>
+                          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                          Submitting...
+                        </>
+                      ) : (
+                        'Submit Review'
+                      )}
+                    </button>
+                  </form>
+                )}
+              </div>
+
+              {/* Reviews List */}
+              <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">
+                  Customer Reviews ({product?.reviews?.length || 0})
+                </h3>
+                {product.reviews?.length > 0 ? (
+                  <div className="space-y-5">
+                    {product.reviews.map((review) => (
+                      <div key={review._id} className="border border-gray-100 rounded-xl p-5">
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center flex-shrink-0">
+                              <span className="text-white text-sm font-bold">{getInitials(review.name)}</span>
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-sm text-gray-900">{review.name}</h4>
+                              <div className="flex items-center gap-0.5 mt-0.5">
+                                {[...Array(5)].map((_, i) => (
+                                  <StarSolidIcon
+                                    key={i}
+                                    className={`h-3.5 w-3.5 ${i < review.rating ? 'text-yellow-400' : 'text-gray-200'}`}
+                                  />
+                                ))}
+                              </div>
                             </div>
                           </div>
+                          <span className="text-xs text-gray-400 whitespace-nowrap">
+                            {new Date(review.createdAt).toLocaleDateString('en-IN', {
+                              day: 'numeric', month: 'short', year: 'numeric',
+                            })}
+                          </span>
                         </div>
-                        <span className="text-xs text-gray-400 whitespace-nowrap">
-                          {new Date(review.createdAt).toLocaleDateString('en-IN', {
-                            day: 'numeric', month: 'short', year: 'numeric',
-                          })}
-                        </span>
+                        <p className="text-sm text-gray-600 leading-relaxed">{review.comment}</p>
                       </div>
-                      <p className="text-sm text-gray-600 leading-relaxed">{review.comment}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-16">
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 mb-4">
-                    <StarIcon className="h-7 w-7 text-gray-400" />
+                    ))}
                   </div>
-                  <p className="text-gray-500">No reviews yet. Be the first to review this product!</p>
-                </div>
-              )}
+                ) : (
+                  <div className="text-center py-16">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 mb-4">
+                      <StarIcon className="h-7 w-7 text-gray-400" />
+                    </div>
+                    <p className="text-gray-500">No reviews yet. Be the first to review this product!</p>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

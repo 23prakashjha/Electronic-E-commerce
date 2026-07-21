@@ -4,10 +4,7 @@ import {
   ShoppingCart, Heart, Star, Zap, TrendingUp, Award, Percent,
   Sparkles, ArrowRight, Package, CheckCircle, Mail, Headphones,
   Shield, Truck, ChevronLeft, ChevronRight, Eye, Clock, Users,
-  Repeat, CreditCard, Gift, ShieldCheck, BookOpen, Smartphone,
-  Share2, Timer, ThumbsUp, Wallet,
-  BadgeCheck, CircleDollarSign, RefreshCw, MessageSquare, MapPin,
-  HelpCircle, Store, Camera
+  ThumbsUp, Wallet, BadgeCheck, CircleDollarSign, RefreshCw
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
@@ -36,7 +33,6 @@ import heroTablet from '../assets/hero-tabs.png';
 import heroWashing from '../assets/hero-wash.png';
 import heroFridge from '../assets/hero-ref.png';
 import heroAccessories from '../assets/hero-acc.png';
-import shopApp from '../assets/shop.png';
 import getImageUrl from '../utils/getImageUrl';
 
 const API_BASE = 'http://localhost:5000/api';
@@ -212,79 +208,6 @@ const BRANDS = [
   { name: "Vivo", productCount: 53, logo: vivoLogo },
   { name: "Motorola", productCount: 47, logo: motorolaLogo },
   { name: "Oppo", productCount: 51, logo: oppoLogo }
-];
-
-const BLOG_POSTS = [
-  {
-    id: "bp1",
-    title: "Top 10 Gadgets That Will Define 2026",
-    excerpt: "From AI-powered wearables to foldable laptops, these are the must-watch tech trends this year.",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop",
-    category: "Trending",
-    date: "Jul 15, 2026",
-    readTime: "5 min read"
-  },
-  {
-    id: "bp2",
-    title: "How to Choose the Perfect Laptop",
-    excerpt: "A complete buyer's guide covering performance, battery life, display quality, and more.",
-    image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=400&fit=crop",
-    category: "Guides",
-    date: "Jul 12, 2026",
-    readTime: "8 min read"
-  },
-  {
-    id: "bp3",
-    title: "Smart Home Automation on a Budget",
-    excerpt: "Build your dream smart home without breaking the bank. Tips, tricks, and product picks inside.",
-    image: "https://images.unsplash.com/photo-1558002038-1055907df827?w=600&h=400&fit=crop",
-    category: "Tips",
-    date: "Jul 10, 2026",
-    readTime: "6 min read"
-  }
-];
-
-const SOCIAL_POSTS = [
-  { id: "s1", image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&h=300&fit=crop" },
-  { id: "s2", image: "https://images.unsplash.com/photo-1585298723682-7115561c51b7?w=300&h=300&fit=crop" },
-  { id: "s3", image: "https://images.unsplash.com/photo-1546868871-af0de0ae72be?w=300&h=300&fit=crop" },
-  { id: "s4", image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&h=300&fit=crop" },
-  { id: "s5", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" },
-  { id: "s6", image: "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=300&h=300&fit=crop" }
-];
-
-const WARRANTY_PLANS = [
-  {
-    name: "Basic",
-    price: 49,
-    period: "1 Year",
-    features: ["Manufacturing Defects", "1 Year Coverage", "Online Support", "Basic Replacement"],
-    color: "from-blue-500 to-blue-600",
-    popular: false
-  },
-  {
-    name: "Standard",
-    price: 99,
-    period: "2 Years",
-    features: ["All Basic Features", "Accidental Damage", "Priority Support", "Free Home Pickup", "Extended Replacement"],
-    color: "from-purple-500 to-pink-500",
-    popular: true
-  },
-  {
-    name: "Premium",
-    price: 179,
-    period: "3 Years",
-    features: ["All Standard Features", "Liquid Damage", "Theft Protection", "24/7 VIP Support", "Express Replacement", "Annual Maintenance"],
-    color: "from-orange-500 to-red-500",
-    popular: false
-  }
-];
-
-const GIFT_CARDS = [
-  { amount: 25, color: "from-emerald-400 to-teal-500", label: "Starter" },
-  { amount: 50, color: "from-blue-400 to-indigo-500", label: "Popular" },
-  { amount: 100, color: "from-purple-400 to-pink-500", label: "Premium" },
-  { amount: 200, color: "from-orange-400 to-red-500", label: "Ultimate" }
 ];
 
 const normalizeProduct = (p) => ({
@@ -510,19 +433,19 @@ const HomePage = () => {
     }
   };
 
-  const SectionHeader = ({ badge, title, subtitle, gradient, icon: Icon }) => (
+  const SectionHeader = ({ label, title, subtitle, gradient, icon: Icon }) => (
     <div className="text-center mb-12 md:mb-14">
-      <div className={`inline-flex items-center gap-2 bg-gradient-to-r ${badge} px-4 py-2 rounded-full mb-4`}>
-        {Icon && <Icon className="w-5 h-5" />}
-        <span className="font-semibold text-sm">
-          {badge.includes('blue') ? 'Handpicked for You' : badge.includes('green') ? 'Just Dropped' : badge.includes('orange') ? "Everyone's Talking About" : badge.includes('purple') ? 'Our Partners' : badge.includes('red') ? 'Limited Offers' : badge.includes('teal') ? 'Rewards' : badge.includes('pink') ? 'Exclusive' : badge.includes('yellow') ? 'Top Rated' : badge.includes('indigo') ? 'Read & Learn' : badge.includes('rose') ? 'Stay Connected' : ''}
-        </span>
-      </div>
+      {label && (
+        <div className={`inline-flex items-center gap-2 bg-gradient-to-r ${gradient} text-white px-4 py-2 rounded-full mb-4`}>
+          {Icon && <Icon className="w-4 h-4" />}
+          <span className="font-semibold text-sm">{label}</span>
+        </div>
+      )}
       <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
         {title.split(' ').slice(0, -1).join(' ')}{' '}
         <span className={`text-transparent bg-clip-text bg-gradient-to-r ${gradient}`}>{title.split(' ').pop()}</span>
       </h2>
-      <p className="text-gray-600 text-lg max-w-2xl mx-auto">{subtitle}</p>
+      <p className="text-gray-500 text-lg max-w-2xl mx-auto">{subtitle}</p>
     </div>
   );
 
@@ -591,7 +514,7 @@ const HomePage = () => {
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-xl lg:text-2xl font-bold text-gray-900">
               ₹{product.price.toLocaleString('en-IN')}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
@@ -605,28 +528,6 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen overflow-hidden">
-      {/* Background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-40 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-green-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '3s' }} />
-      </div>
-
-      {/* Marquee Announcement Bar */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-2 overflow-hidden relative">
-        <div className="animate-marquee whitespace-nowrap flex items-center gap-8 text-sm font-medium">
-          {Array(3).fill(null).map((_, i) => (
-            <React.Fragment key={i}>
-              <span className="inline-flex items-center gap-2"><Zap className="w-3.5 h-3.5 text-yellow-300" /> FREE SHIPPING on orders over ₹500</span>
-              <span className="inline-flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-yellow-300" /> Flash Sale — Up to 70% OFF!</span>
-              <span className="inline-flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-yellow-300" /> 100% Genuine Products</span>
-              <span className="inline-flex items-center gap-2"><Headphones className="w-3.5 h-3.5 text-yellow-300" /> 24/7 Customer Support</span>
-              <span className="inline-flex items-center gap-2"><Gift className="w-3.5 h-3.5 text-yellow-300" /> Refer & Earn ₹200</span>
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
 
       {/* ==================== 1. HERO ==================== */}
       <section
@@ -754,7 +655,7 @@ const HomePage = () => {
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            badge="from-blue-100 to-purple-100"
+            label="Handpicked for You"
             title="Featured Electronics"
             subtitle="Discover our curated selection of premium electronics with unbeatable deals"
             gradient="from-blue-600 to-purple-600"
@@ -777,7 +678,7 @@ const HomePage = () => {
       <section className="py-10 md:py-16 bg-gradient-to-b from-slate-50/80 to-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            badge="from-purple-100 to-pink-100"
+            label="Our Partners"
             title="Popular Brands"
             subtitle="Shop from the world's most trusted electronics brands"
             gradient="from-purple-600 to-pink-600"
@@ -871,7 +772,7 @@ const HomePage = () => {
       <section className="py-16 md:py-24 bg-gradient-to-br from-cyan-50/50 via-white to-emerald-50/40 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            badge="from-green-100 to-emerald-100"
+            label="Just Dropped"
             title="Latest Arrivals"
             subtitle="Be the first to experience the newest tech innovations"
             gradient="from-green-600 to-emerald-600"
@@ -930,7 +831,7 @@ const HomePage = () => {
       <section className="py-16 md:py-24 bg-gradient-to-br from-amber-50/40 via-orange-50/30 to-rose-50/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            badge="from-orange-100 to-red-100"
+            label="Everyone's Talking About"
             title="Trending Now"
             subtitle="Hot products that are taking the market by storm"
             gradient="from-orange-600 to-red-600"
@@ -980,111 +881,23 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ==================== 12. GIFT CARDS ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-emerald-50/50 via-teal-50/30 to-cyan-50/40 relative">
+      {/* ==================== TRUST STRIP ==================== */}
+      <section className="py-12 md:py-16 bg-gray-50 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            badge="from-teal-100 to-green-100"
-            title="Gift Cards"
-            subtitle="Give the gift of choice — perfect for any occasion"
-            gradient="from-teal-600 to-green-600"
-            icon={Gift}
-          />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {GIFT_CARDS.map((card) => (
-              <div
-                key={card.amount}
-                className={`group relative bg-gradient-to-br ${card.color} rounded-3xl p-6 md:p-8 text-white cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden`}
-              >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-8 translate-x-8" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-6 -translate-x-6" />
-                <div className="relative z-10">
-                  <span className="text-xs font-semibold uppercase tracking-wider opacity-80">{card.label}</span>
-                  <div className="flex items-center gap-1 mt-2 mb-4">
-                    <span className="text-4xl md:text-5xl font-bold">₹{card.amount.toLocaleString('en-IN')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 mb-6">
-                    <Gift className="w-4 h-4 opacity-80" />
-                    <span className="text-sm opacity-80">Gift Card</span>
-                  </div>
-                  <button className="w-full bg-white/20 backdrop-blur-xl hover:bg-white/30 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 border border-white/20">
-                    Buy Now
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== 13. WARRANTY & PROTECTION ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-violet-50/40 via-fuchsia-50/20 to-pink-50/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            badge="from-blue-100 to-cyan-100"
-            title="Protection Plans"
-            subtitle="Keep your devices safe with our extended warranty options"
-            gradient="from-blue-600 to-cyan-600"
-            icon={ShieldCheck}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {WARRANTY_PLANS.map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border ${plan.popular ? 'border-purple-200 ring-2 ring-purple-100 md:scale-[1.02]' : 'border-gray-100'} transform hover:-translate-y-2`}
-              >
-                {plan.popular && (
-                  <div className={`bg-gradient-to-r ${plan.color} text-white text-center py-2.5 text-sm font-bold`}>
-                    MOST POPULAR
-                  </div>
-                )}
-                <div className="p-6 md:p-8">
-                  <div className={`w-14 h-14 bg-gradient-to-br ${plan.color} rounded-2xl flex items-center justify-center mb-6`}>
-                    <Shield className="w-7 h-7 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-1">{plan.name}</h3>
-                  <p className="text-gray-500 text-sm mb-4">{plan.period} Coverage</p>
-                  <div className="flex items-baseline gap-1 mb-6">
-                    <span className="text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">₹{plan.price}</span>
-                    <span className="text-gray-400">/{plan.period}</span>
-                  </div>
-                  <div className="space-y-3 mb-8">
-                    {plan.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                        <span className="text-gray-600 text-sm">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => toast.success(`${plan.name} plan selected!`)}
-                    className={`w-full py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-[1.02] ${plan.popular ? `bg-gradient-to-r ${plan.color} text-white hover:opacity-90 shadow-lg` : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
-                  >
-                    Get {plan.name} Plan
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== 14. FEATURES ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-r from-[#1e40af] via-[#6d28d9] to-[#1e40af] text-white relative overflow-hidden" data-section="features">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-10" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { icon: Truck, title: "Free Shipping", desc: "On orders over ₹500" },
               { icon: Shield, title: "Secure Payment", desc: "100% secure transactions" },
               { icon: Headphones, title: "24/7 Support", desc: "Dedicated customer service" }
             ].map((item, index) => (
-              <div key={index} className="flex flex-col items-center text-center p-6 md:p-8 rounded-3xl bg-white/10 backdrop-blur-xl hover:bg-white/20 transition-all duration-300 group border border-white/10 hover:border-white/30">
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <item.icon className="w-8 h-8 md:w-10 md:h-10" />
+              <div key={index} className="flex items-center gap-4 p-5 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-blue-100 transition-all duration-300 group">
+                <div className="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-blue-100 transition-colors">
+                  <item.icon className="w-7 h-7 text-blue-600" />
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-3">{item.title}</h3>
-                <p className="opacity-90 text-sm md:text-base">{item.desc}</p>
+                <div>
+                  <h3 className="font-bold text-gray-800 text-base">{item.title}</h3>
+                  <p className="text-gray-500 text-sm">{item.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -1111,7 +924,7 @@ const HomePage = () => {
       <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50/40 via-indigo-50/30 to-violet-50/40" data-section="whychoose">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
-            badge="from-yellow-100 to-amber-100"
+            label="Top Rated"
             title="Why Choose Us"
             subtitle="We go the extra mile to make your shopping experience exceptional"
             gradient="from-yellow-600 to-amber-600"
@@ -1198,252 +1011,7 @@ const HomePage = () => {
         `}</style>
       </section>
 
-      {/* ==================== 18. TECH BLOG ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-sky-50/40 via-white to-cyan-50/30 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            badge="from-indigo-100 to-violet-100"
-            title="Tech Blog"
-            subtitle="Stay informed with the latest tech news, guides, and tips"
-            gradient="from-indigo-600 to-violet-600"
-            icon={BookOpen}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {BLOG_POSTS.map((post) => (
-              <article
-                key={post.id}
-                className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-indigo-200 transform hover:-translate-y-2"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-xl px-3 py-1.5 rounded-full text-xs font-bold text-indigo-600">
-                    {post.category}
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-4 text-sm text-gray-400 mb-3">
-                    <span>{post.date}</span>
-                    <span>·</span>
-                    <span>{post.readTime}</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-2">{post.excerpt}</p>
-                  <Link
-                    to="#"
-                    className="inline-flex items-center gap-2 text-indigo-600 font-semibold text-sm hover:text-indigo-800 transition-colors"
-                  >
-                    Read More
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== 19. DOWNLOAD OUR APP ==================== */}
-      <section className="py-20 md:py-28 text-white relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={shopApp} alt="Shop on the Go" className="w-full h-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
-        </div>
-
-        {/* Animated floating orbs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-10 left-[10%] w-72 h-72 bg-purple-500/20 rounded-full blur-[100px] animate-pulse" />
-          <div className="absolute bottom-10 right-[10%] w-96 h-96 bg-pink-500/15 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '2s' }} />
-        </div>
-
-        {/* Floating decorative elements */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-20 left-[8%] w-14 h-14 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl flex items-center justify-center animate-bounce" style={{ animationDuration: '3s' }}>
-            <svg className="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-          </div>
-          <div className="absolute top-32 right-[12%] w-12 h-12 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}>
-            <svg className="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-          </div>
-          <div className="absolute bottom-24 left-[15%] w-10 h-10 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg flex items-center justify-center animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '1s' }}>
-            <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" /></svg>
-          </div>
-          <div className="absolute bottom-40 right-[8%] w-16 h-16 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl flex items-center justify-center animate-bounce" style={{ animationDuration: '4.5s', animationDelay: '1.5s' }}>
-            <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
-          </div>
-        </div>
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl px-5 py-2.5 rounded-full mb-8 border border-white/20 shadow-lg shadow-purple-500/10">
-            <Smartphone className="w-5 h-5 text-purple-400" />
-            <span className="text-purple-300 font-semibold text-sm tracking-wide">Mobile App</span>
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-ping" />
-          </div>
-
-          {/* Heading */}
-          <h2 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-6 leading-tight">
-            Shop on the{' '}
-            <span className="relative inline-block">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400">Go</span>
-              <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 rounded-full" />
-            </span>
-          </h2>
-
-          {/* Subtitle */}
-          <p className="text-gray-300 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl mx-auto">
-            Download our app for exclusive mobile-only deals, real-time order tracking, and a seamless shopping experience.
-          </p>
-
-          {/* Stats row */}
-          <div className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
-            {[
-              { number: '5M+', label: 'Downloads', icon: '📥' },
-              { number: '4.8★', label: 'App Rating', icon: '⭐' },
-              { number: '50K+', label: 'Daily Users', icon: '👥' },
-              { number: '200+', label: 'Deals Daily', icon: '🔥' },
-            ].map((stat, idx) => (
-              <div key={idx} className="flex flex-col items-center gap-1 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-6 py-4 hover:bg-white/10 transition-all duration-300 hover:scale-105 min-w-[120px]">
-                <span className="text-2xl">{stat.icon}</span>
-                <span className="text-2xl md:text-3xl font-extrabold text-white">{stat.number}</span>
-                <span className="text-gray-400 text-xs font-medium uppercase tracking-wider">{stat.label}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Feature chips */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {[
-              { text: "App-only discounts", icon: "🏷️" },
-              { text: "Real-time tracking", icon: "📍" },
-              { text: "One-tap reorder", icon: "⚡" },
-              { text: "AR try-on", icon: "📷" },
-              { text: "Secure payments", icon: "🔒" },
-              { text: "24/7 support", icon: "💬" },
-            ].map((feature, idx) => (
-              <div key={idx} className="group flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2.5 rounded-full border border-white/10 hover:bg-white/20 hover:border-white/20 transition-all duration-300 cursor-default">
-                <span className="text-base group-hover:scale-125 transition-transform duration-300">{feature.icon}</span>
-                <span className="text-gray-200 text-sm font-medium">{feature.text}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Download buttons */}
-          <div className="flex flex-wrap justify-center gap-5 mb-14">
-            <button className="group flex items-center gap-4 bg-white text-gray-900 px-8 py-4 rounded-2xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-white/10 hover:shadow-white/20">
-              <svg className="w-8 h-8 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-              </svg>
-              <div className="text-left border-l border-gray-300 pl-4">
-                <div className="text-[11px] opacity-60 font-medium uppercase tracking-wider">Download on the</div>
-                <div className="text-base font-bold -mt-0.5">App Store</div>
-              </div>
-            </button>
-            <button className="group flex items-center gap-4 bg-white text-gray-900 px-8 py-4 rounded-2xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-white/10 hover:shadow-white/20">
-              <svg className="w-8 h-8 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 1.33a1 1 0 010 1.722l-2.302 1.33-2.535-2.191 2.535-2.191zM5.864 3.457l10.937 6.333-2.302 2.302-8.635-8.635z"/>
-              </svg>
-              <div className="text-left border-l border-gray-300 pl-4">
-                <div className="text-[11px] opacity-60 font-medium uppercase tracking-wider">Get it on</div>
-                <div className="text-base font-bold -mt-0.5">Google Play</div>
-              </div>
-            </button>
-          </div>
-
-          {/* Trust badges */}
-          <div className="flex flex-wrap justify-center items-center gap-6 text-gray-400 text-sm">
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-              <span>100% Secure</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-              <span>Fast & Lightweight</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-              <span>No Data Usage</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== 21. REFERRAL PROGRAM ==================== */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-[#059669] via-[#0d9488] to-[#0891b2] text-white relative overflow-hidden" data-section="referral">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-20" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-xl px-5 py-2.5 rounded-full mb-6">
-              <Share2 className="w-5 h-5 text-white" />
-              <span className="font-semibold text-sm">Referral Program</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              Refer & Earn <span className="text-yellow-300">₹200</span>
-            </h2>
-            <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">Share ElectroShop with friends and earn rewards for every successful referral</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12">
-            {[
-              { step: "01", icon: Share2, title: "Share Your Link", desc: "Get your unique referral link from your account dashboard" },
-              { step: "02", icon: Users, title: "Friend Signs Up", desc: "Your friend creates an account using your referral link" },
-              { step: "03", icon: CreditCard, title: "You Both Earn", desc: "You get ₹200 credit and your friend gets 15% off first order" }
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-8 text-center border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-2"
-              >
-                <div className="text-5xl font-black text-white/20 mb-4">{item.step}</div>
-                <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <item.icon className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-                <p className="text-white/80 text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="text-center">
-            <button className="inline-flex items-center gap-3 bg-white text-emerald-600 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl">
-              <Share2 className="w-5 h-5" />
-              Start Referring
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== 22. QUICK LINKS BAR ==================== */}
-      <section className="py-12 md:py-16 bg-gradient-to-b from-white to-slate-50/80 border-y border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
-            {[
-              { icon: Truck, label: "Track Order", desc: "Check delivery status" },
-              { icon: HelpCircle, label: "Help Center", desc: "Get support & FAQ" },
-              { icon: MapPin, label: "Store Locator", desc: "Find nearest store" },
-              { icon: Gift, label: "Gift Cards", desc: "Send a gift card" },
-              { icon: Store, label: "Sell With Us", desc: "Become a seller" }
-            ].map((item, idx) => (
-              <Link
-                key={idx}
-                to="#"
-                className="flex flex-col items-center text-center p-4 md:p-5 rounded-2xl hover:bg-gray-50 transition-all duration-300 group"
-              >
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                  <item.icon className="w-6 h-6 text-white" />
-                </div>
-                <span className="font-bold text-gray-800 text-sm md:text-base group-hover:text-blue-600 transition-colors">{item.label}</span>
-                <span className="text-gray-400 text-xs mt-1">{item.desc}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== 23. NEWSLETTER ==================== */}
+      {/* ==================== NEWSLETTER ==================== */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-[#1e40af] via-[#7c3aed] to-[#db2777] text-white relative overflow-hidden" data-section="newsletter">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
@@ -1495,13 +1063,6 @@ const HomePage = () => {
 
       {/* Scroll Reveal Styles */}
         <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.33%); }
-        }
-        .animate-marquee {
-          animation: marquee 20s linear infinite;
-        }
         [data-section] {
           opacity: 0;
           transform: translateY(40px);

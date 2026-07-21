@@ -9,6 +9,7 @@ import {
   XMarkIcon,
   FolderPlusIcon
 } from '@heroicons/react/24/outline';
+import { StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 
 const API_BASE = 'http://localhost:5000';
@@ -31,6 +32,10 @@ const ProductForm = () => {
     features: [],
     images: []
   });
+  
+  const [ratingAverage, setRatingAverage] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
+  const [hoveredStar, setHoveredStar] = useState(0);
   
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -89,6 +94,8 @@ const ProductForm = () => {
           features: p.features || [],
           images: p.images || []
         });
+        setRatingAverage(p.ratings?.average || 0);
+        setRatingCount(p.ratings?.count || 0);
       }
     } catch (err) {
       console.error('Error fetching product:', err);
@@ -261,7 +268,11 @@ const ProductForm = () => {
           price: Number(formData.price),
           discountPrice: formData.discountPrice ? Number(formData.discountPrice) : undefined,
           stock: Number(formData.stock),
-          category: formData.category || undefined
+          category: formData.category || undefined,
+          ratings: {
+            average: ratingAverage,
+            count: ratingCount
+          }
         })
       });
       const data = await res.json();
@@ -686,6 +697,59 @@ const ProductForm = () => {
               ) : (
                 <p className="text-gray-600 text-sm text-center py-3">No specifications added</p>
               )}
+            </div>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+            <div className="p-5 border-b border-white/10 flex items-center space-x-3">
+              <div className="w-8 h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                <StarSolidIcon className="h-4 w-4 text-yellow-400" />
+              </div>
+              <h2 className="text-base font-bold text-white">Ratings & Reviews</h2>
+            </div>
+            <div className="p-5">
+              <p className="text-gray-500 text-xs mb-4">Set the initial average rating and review count for this product. These values are normally auto-calculated from customer reviews, but you can override them here.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Average Rating</label>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-0.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setRatingAverage(star === ratingAverage ? 0 : star)}
+                          onMouseEnter={() => setHoveredStar(star)}
+                          onMouseLeave={() => setHoveredStar(0)}
+                          className="p-0.5 transition-transform hover:scale-110"
+                        >
+                          <StarSolidIcon
+                            className={`h-7 w-7 transition-colors ${
+                              star <= (hoveredStar || ratingAverage)
+                                ? 'text-yellow-400'
+                                : 'text-gray-700'
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                    {ratingAverage > 0 && (
+                      <span className="text-sm text-gray-400 font-medium">{ratingAverage}.0</span>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Review Count</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={ratingCount}
+                    onChange={(e) => setRatingCount(Math.max(0, Number(e.target.value)))}
+                    className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500/40 transition-all"
+                    placeholder="0"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
